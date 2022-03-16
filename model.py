@@ -22,6 +22,8 @@ class User(db.Model):
     name = db.Column(db.String(100),
                      nullable=False)
 
+    # characters = a list of Character objects this user has
+
     def __repr__(self):
         return f'<User obj id={self.user_id} name={self.name} email={self.email}>'
 
@@ -43,6 +45,12 @@ class Character(db.Model):
                                nullable=False)
     created_date = db.Column(db.DateTime)
 
+    user = db.relationship('User', backref='characters')
+    player_class = db.relationship('PlayerClass', backref='characters')
+
+    #slots = a list of Slot objects used by this character
+    #days = a list of Day objects this character has created
+
     def __repr__(self):
         return f'<Character obj id={self.character_id} name={self.character_name}>'
 
@@ -59,6 +67,8 @@ class PlayerClass(db.Model):
     class_slug = db.Column(db.String(50),
                            nullable=False)
     class_name = db.Column(db.String(50))
+
+    #characters = a list of Character objects of this class
 
     def __repr__(self):
         return f'<PlayerClass obj id={self.class_id} slug={self.class_slug}>'
@@ -100,6 +110,9 @@ class Slot(db.Model):
     slot_level = db.Column(db.Integer,
                            nullable=False)
 
+    day = db.relationship('Day', backref='slots')
+    character = db.relationship('Character', backref='slots')
+
     def __repr__(self):
         return f'<Slot obj id={self.slot_id}>'
 
@@ -115,7 +128,15 @@ class Day(db.Model):
                        primary_key=True)
     day_reference = db.Column(db.String(100))
     first_session_date = db.Column(db.DateTime)
+    character_id = db.Column(db.Integer,
+                        db.ForeignKey("characters.character_id"))
 
+    # slots = a list of Slot objects used on this day
+
+    character = db.relationship('Character', backref='days')
+
+    def __repr__(self):
+        return f'<Day obj id={self.day_id}>'
 
 
 

@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      {% block title %}{% endblock %}
+    </title>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+
+    {% for msg in get_flashed_messages() %}
+      <p class="flash-msg">
+       {{ msg }}
+      </p>
+    {% endfor %}
+
+    <h3>
+
+      {% block first_header %}
+      {% endblock %}
+      
+      {% if "user_id" in session %}
+      <p><a href="/logout">Log out</a></p>
+      {% endif %}
+    </h3>
+
+    {% block body %}{% endblock %}
+
+    {% block after_body %}{% endblock %}
+  </body>
+</html>

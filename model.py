@@ -23,6 +23,7 @@ class User(db.Model):
                      nullable=False)
 
     # characters = a list of Character objects this user has
+    # slots = a list of Slot objects this user has used
 
     def __repr__(self):
         return f'<User obj id={self.user_id} name={self.name} email={self.email}>'
@@ -41,6 +42,7 @@ class Character(db.Model):
                         db.ForeignKey("users.user_id"))
     class_id = db.Column(db.Integer,
                          db.ForeignKey("classes.class_id"))
+    character_level = db.Column(db.Integer)
     character_name = db.Column(db.String(50),
                                nullable=False)
     created_date = db.Column(db.DateTime)

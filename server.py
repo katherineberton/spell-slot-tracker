@@ -38,7 +38,7 @@ def log_user_in():
     #if a user with this email address exists:
     if crud.get_user_by_email(login_email):
 
-        #assign variable user to the User obj with the associated email address
+        #assign variable name user to the User obj with the associated email address
         user = crud.get_user_by_email(login_email)
 
         #if password matches:
@@ -101,7 +101,9 @@ def handle_new_user():
 def show_landing():
     """Shows landing page listing user's characters"""
 
-    return render_template('landing.html')
+    characters = crud.get_characters_by_user_id(session['user_id'])
+
+    return render_template('landing.html', char_list=characters)
 
 
 
@@ -114,6 +116,7 @@ def get_character_details():
 
 @app.route('/new_char_registration', methods=["POST"])
 def create_a_character():
+    """Creates new character"""
 
     new_char_name = request.form.get('char-name')
     slug = request.form.get('char-class')
@@ -134,7 +137,17 @@ def create_a_character():
     return redirect('/landing')
 
     
-    
+
+@app.route('/level_up-<char_id>')
+def increase_char_level(char_id):
+    """Increase character level"""
+
+    crud.level_character_up_by_id(char_id)
+    db.session.commit()
+
+    return redirect('/landing')
+
+
 
 if __name__ == '__main__':
     connect_to_db(app)

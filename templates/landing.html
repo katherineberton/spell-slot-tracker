@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Spell slot tracker{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block first_header %}Spell slot tracker landing{% endblock %}
+
+{% block body %}
+
+<p>Landing</p>
+
+{% for char in char_list.sorted() %}
+    <div display="flex">
+        {{ char.character_name }} <a href="/level_up-{{ char.character_id}}">(level up)</a>
+        <uL>
+            <li>Class: {{ char.player_class.class_name}}</li>
+            <li>Level: {{ char.character_level }}</li>
+        </uL>
+    </div>
+{% endfor %}
+
+<a href="/create_a_character">Add a character.</a>
+
+{% endblock %}
+
+{% block after_body %}{% endblock %}

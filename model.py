@@ -52,6 +52,7 @@ class Character(db.Model):
 
     #slots = a list of Slot objects used by this character
     #days = a list of Day objects this character has created
+    #spells_known = a list of SpellKnown objects this character knows
 
     def __repr__(self):
         return f'<Character obj id={self.character_id} name={self.character_name}>'
@@ -91,6 +92,29 @@ class Spell(db.Model):
 
     def __repr__(self):
         return f'<Spell obj id={self.spell_id} slug={self.spell_slug}>' 
+
+
+
+class SpellKnown(db.Model):
+    """Spells known by a character - relevant for some but not all classes"""
+
+    __tablename__ = 'spells_known'
+
+    spell_known_id = db.Column(db.Integer,
+                              autoincrement=True,
+                              primary_key=True)
+    spell_id = db.Column(db.Integer,
+                         db.ForeignKey('spells.spell_type_id'))
+    character_id = db.Column(db.Integer,
+                             db.ForeignKey('characters.character_id'))
+
+    characters = db.relationship('Character', backref='spells_known')
+    spells = db.relationship('Spell', backref='spells_known')
+
+    def __repr__(self):
+        return f'<SpellKnown obj id={self.spell_known_id}>'
+
+
 
 
 

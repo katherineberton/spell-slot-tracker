@@ -31,11 +31,21 @@ def create_character(name, level):
     new_character = Character(character_name=name, character_level=level, created_date=datetime.now())
     return new_character
 
+def get_character_by_id(char_id):
+    """Retrieves Character object from the db with given id"""
+
+    return Character.query.get(char_id)
+
 def get_characters_by_user_id(id):
     """Returns list of characters belonging to the user by id"""
 
     return get_user_by_id(id).characters
 
+def level_character_up_by_id(char_id):
+    """Takes in a character id and increments the level by one"""
+
+    char = get_character_by_id(char_id)
+    char.character_level += 1
 
 #managing classes
 
@@ -58,9 +68,9 @@ def get_class_by_slug(slug):
 #create day
 #create slot
 
-#initial data population
 
 
+#initial seed
 
 def create_spell(slug, name):
     """Create and return a Spell object - initial data pop"""

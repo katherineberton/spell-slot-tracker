@@ -1,3 +1,2 @@
-1. nested dictionaries for caster level slot level rules
-2. keep "current slot status" separate from slot history. WHERE?
-3. add spells_known table to db
+3. make a new table for each character called current_state or something like that
+4. ask for how to import from a different directory

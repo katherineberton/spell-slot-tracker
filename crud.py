@@ -1,7 +1,9 @@
 """CRUD operations"""
 
-from model import User, Character, Spell, Slot, Day, PlayerClass, connect_to_db, db
+from model import User, Character, Spell, Slot, Day, PlayerClass, SpellKnown, connect_to_db, db
 from datetime import datetime
+
+from slot_rules import slot_rules
 
 
 #managing users

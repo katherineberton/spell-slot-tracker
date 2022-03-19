@@ -91,7 +91,7 @@ class Spell(db.Model):
     spell_name = db.Column(db.String(100))
 
     def __repr__(self):
-        return f'<Spell obj id={self.spell_id} slug={self.spell_slug}>' 
+        return f'<Spell obj id={self.spell_type_id} slug={self.spell_slug}>' 
 
 
 
@@ -109,7 +109,7 @@ class SpellKnown(db.Model):
                              db.ForeignKey('characters.character_id'))
 
     characters = db.relationship('Character', backref='spells_known')
-    spells = db.relationship('Spell', backref='spells_known')
+    spells = db.relationship('Spell', backref='spells_known') #probably not necessary info
 
     def __repr__(self):
         return f'<SpellKnown obj id={self.spell_known_id}>'

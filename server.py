@@ -1,3 +1,4 @@
+from os import name
 from flask import Flask, render_template, render_template_string, request, flash, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 
@@ -103,7 +104,21 @@ def show_landing():
 
     characters = crud.get_characters_by_user_id(session['user_id'])
 
-    return render_template('landing.html', char_list=characters)
+    all_spells_known = {}
+
+    for character in characters:
+
+        #blank list for each character
+        spells_known = []
+
+        #populate the list with the spell name associated with the id of each spell known
+        for spell in character.spells_known:
+            spells_known.append(crud.get_spell_name_by_spell_known(spell.spell_known_id))
+
+        #add an entry to spell_dict dictionary with key char id and value list
+        all_spells_known[character.character_id] = spells_known
+
+    return render_template('landing.html', char_list=characters, spell_dict=all_spells_known)
 
 
 
@@ -148,6 +163,44 @@ def increase_char_level(char_id):
     return redirect('/landing')
 
 
+
+@app.route('/add_spell_known-<char_id>')
+def add_spell_known(char_id):
+    """Shows spell list"""
+    #adjust this later to filter for spells that only the character's class can use
+    spell_options = crud.get_all_spells()
+
+    return render_template('all_spells.html', spell_options=spell_options, char_id=char_id)
+
+
+
+@app.route('/handle_add_spell-<char_id>')
+def handle_add_spell(char_id):
+
+    #retrieve slug from form
+    slug = request.args.get('spell_to_add')
+
+    #use slug to create new spell known
+    new_spell = crud.create_spell_known(slug)
+
+    #retrieve character from url
+    char = crud.get_character_by_id(char_id)
+
+    #append spell known to char's spells_known list
+    char.spells_known.append(new_spell)
+
+    db.session.commit()
+
+    return redirect('/landing')
+
+
+@app.route('/play-<char_id>')
+def show_play_screen(char_id):
+
+    char = crud.get_character_by_id
+    slot_details = crud.get_slot_details_by_level_and_class()
+
+    return render_template('tracker.html')
 
 if __name__ == '__main__':
     connect_to_db(app)

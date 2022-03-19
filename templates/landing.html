@@ -8,19 +8,37 @@
 
 {% block body %}
 
-<p>Landing</p>
+<p>Your Characters:</p>
+{% if char_list %}
+    {% for char in char_list %}
+        <div display="flex">
+            {{ char.character_name }}
 
-{% for char in char_list.sorted() %}
-    <div display="flex">
-        {{ char.character_name }} <a href="/level_up-{{ char.character_id}}">(level up)</a>
-        <uL>
-            <li>Class: {{ char.player_class.class_name}}</li>
-            <li>Level: {{ char.character_level }}</li>
-        </uL>
-    </div>
-{% endfor %}
+            <uL>
+                <li>Class: {{ char.player_class.class_name}}</li>
+                <li>Level: {{ char.character_level }}</li>
+            </uL>
 
-<a href="/create_a_character">Add a character.</a>
+            Spells known:
+            <ul>
+                {% for spell in spell_dict[char.character_id] %}
+                    <li>{{ spell }}</li>
+                {% endfor %}
+            </ul>
+
+            <p>Actions:</br>
+                <button><a href="/level_up-{{ char.character_id }}">Level up</a></button> 
+                <button><a href="/add_spell_known-{{ char.character_id }}">Add a known spell</a></button>
+                <button><a href="/play-{{ character_id }}">Get playing!</a></button>
+            </p>
+            
+        </div>
+    {% endfor %}
+{% else %}
+You haven't created any characters yet! <a href="/create_a_character">Add one here.</a>
+{% endif %}
+
+<p><a href="/create_a_character">Add a character.</a></p>
 
 {% endblock %}
 

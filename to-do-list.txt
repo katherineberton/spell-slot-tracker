@@ -1,14 +1,14 @@
-1. figure out how to deal with sorting characters on landing page
-2. add a filter to get all spells
-3. figure out a better way to get max slot available to a character
-5. how many slots should populate? should it be all of them but with display = none?
-    or should the num populated be subject to the class and level rules?
-6. add rogues
-7. maybe add "spells used today" to the session, and just change the slot component to say "USED" when used
-3. figure out new day/current day functionality
-8. my class/all classes thing on the all spells list
-9. delete spells known
-10. custom classes? will need ot change db model to reflect this
-4. figure out delete button
+
+
+
+figure out how to get things side by side
+new crud function get all spells by class
+add rogues to classes
+my class/all classes on all spells list
+
+
+figure out how to deal with sorting characters on landing page
+figure out how to get max slot available
+custom classes?
 
 

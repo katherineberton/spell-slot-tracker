@@ -171,7 +171,13 @@ def add_spell_known(char_id):
 
 @app.route('/delete_spell_known-<char_id>')
 def delete_spell_known(char_id):
-    spell_slug = request.args.get()
+
+    spell_slug = request.args.get('spell_to_delete')
+    crud.delete_spell_known(char_id=char_id, spell_slug=spell_slug)
+
+    db.session.commit()
+    
+    return redirect('/landing')
 
 
 @app.route('/handle_add_spell-<char_id>')

@@ -11,7 +11,7 @@
 <p>Your Characters:</p>
 {% if char_list %}
     {% for char in char_list %}
-        <div display="flex">
+        <div class="character-summary" id="{{ char.character_id }}">
             {{ char.character_name }}
 
             <uL>
@@ -22,10 +22,14 @@
             Spells known:
             <ul>
                 {% for spell in spell_dict[char.character_id] %}
-                    <li>{{ spell.spell_name }}</li> 
-                    <button>
-                        Delete
-                    </button>
+                    <li>
+                        {{ spell.spell_name }}
+                        <form action="/delete_spell_known-{{ char.character_id }}">
+                            <button name="spell_to_delete" type="submit" value="{{ spell.spell_slug }}">
+                                Delete
+                            </button>
+                        </form>
+                    </li>   
                 {% endfor %}
             </ul>
 

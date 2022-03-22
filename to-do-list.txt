@@ -1,10 +1,14 @@
-3. make a new table with char_id, slot level, used reflecting current day
-1. figure out how to deal with sorting
+1. figure out how to deal with sorting characters on landing page
 2. add a filter to get all spells
-4. how to reflect this on the dom - at the point of use, give that item a state -spell deets
-    at the point of use, add to slots table
-    at the point of clearing, clear the state?
+3. figure out a better way to get max slot available to a character
 5. how many slots should populate? should it be all of them but with display = none?
     or should the num populated be subject to the class and level rules?
 6. add rogues
 7. maybe add "spells used today" to the session, and just change the slot component to say "USED" when used
+3. figure out new day/current day functionality
+8. my class/all classes thing on the all spells list
+9. delete spells known
+10. custom classes? will need ot change db model to reflect this
+4. figure out delete button
+
+

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Spell slot tracker{% endblock %}
+
+{% block js %}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block first_header %}Slot tracker page{% endblock %}
+
+{% block body %}
+    <section id="spells-known">Here are {{ char.character_name }}'s spells known</section>
+    <section id="board">
+        Here are the buttons
+        <container id="slot-buttons-container">
+
+        </container>
+    </section>
+
+    <script src="/static/js/tracker.js"></script>
+{% endblock %}
+
+{% block after_body %}{% endblock %}

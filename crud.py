@@ -1,9 +1,10 @@
 """CRUD operations"""
 
-from model import User, Character, Spell, Slot, Day, PlayerClass, SpellKnown, connect_to_db, db
+from model import User, Character, Spell, Slot, Day, PlayerClass, connect_to_db, db
 from datetime import datetime
 
 from slot_rules import slot_rules
+
 
 
 #----------------------------------------managing users
@@ -23,8 +24,6 @@ def get_user_by_id(user_id):
     """Queries db for User obj with matching id and returns obj"""
 
     return User.query.get(user_id)
-
-
 
 
 
@@ -52,10 +51,6 @@ def level_character_up_by_id(char_id):
     char = get_character_by_id(char_id)
     char.character_level += 1
 
-def get_slot_details_by_level_and_class(player_level, player_class):
-    """Returns slot details by caster level and class"""
-
-    return slot_rules[player_class][player_level]
 
 
 #----------------------------------------managing classes
@@ -75,7 +70,6 @@ def get_class_by_slug(slug):
     """Queries db for PlayerClass obj with matching slug, returns it"""
 
     return PlayerClass.query.filter(PlayerClass.class_slug == slug).first()
-
 
 
 
@@ -102,38 +96,90 @@ def get_spell_id_by_slug(slug):
 
     return Spell.query.filter(Spell.spell_slug == slug).first().spell_type_id
 
+def delete_spell_known(char_id, spell_slug):
+    """Queries db for Character matching char_id and deletes spell matching spell_type_id"""
+
+    char = get_character_by_id(char_id)
+    spell = get_spell_by_slug(spell_slug)
+
+    char.spells.remove(spell)
 
 
 
-#----------------------------------------managing spells known
+#---------------------------------------managing days
 
-def create_spell_known(slug):
-    """Creates and returns new spell known"""
+def create_day(char_id):
+    """Creates and returns a Day object"""
 
-    spell = get_spell_id_by_slug(slug)
-    spell_known = SpellKnown(spell_id=spell)
+    new_day = Day(character_id=char_id, first_session_date=datetime.now())
 
-    return spell_known
+    return new_day
+
+def get_current_day(char_id):
+    """Gets most recent Day object by character id"""
+
+    return Day.query.filter_by(character_id=char_id).order_by(Day.day_id).first()
+
+
+
+#---------------------------------------managing slots
+
+def get_slot_details(char_id):
+    """Returns slot details by caster level and class slug"""
+
+    char = get_character_by_id(char_id)
+
+    char_class = get_class_by_id(char.class_id).class_slug
+    char_level = char.character_level
+
+    return slot_rules[char_class][str(char_level)]
+
+def create_a_slot(char_id, level):
+    """Creates and returns one slot for the character with given id and slot level"""
+
+    char_current_day = get_current_day(char_id)
+    slot_used = Slot(character_id=char_id, day_id=char_current_day, slot_level=level)
+
+def populate_slots(char_id):
+    """Prepopulates slots on creation of a new day to be updated by casting of a spell"""
     
-def get_spells_known_by_character_id(char_id):
-    """Queries db for SpellKnown obj with matching char_id and returns list"""
+    char = get_character_by_id(char_id)
+    char_class = get_class_by_id(char.class_id).class_slug
+    char_level = char.character_level
 
-    return Character.query.get(char_id).spells_known
+    #at each casting level, 1 through 9
+    for i in range(1,10):
 
-def get_spell_name_by_spell_known(spell_known_id):
-    """Joins SpellKnown and Spell objs and returns Spell.spell_name"""
+        #retrieve the total number of slots from slot_rules
+        num_slots = get_slot_details(player_class=char_class, player_level=char_level)[f'max_slots_{i}']
 
-    return SpellKnown.query.get(spell_known_id).spells.spell_name
+        #create that many blank slots at that level
+        for j in range(num_slots):
+            create_a_slot(char_id=char_id, level=i)
 
+def get_highest_slot(char_id):
+    """Gets highest level slot of available slots"""
+    pass
 
+def get_slot(char_id, level):
+    """Queries db for first empty Slot object with matching character id and day id at the specified level"""
 
+    char_current_day = get_current_day(char_id).day_id
 
-#create day
-#create slot
+    return Slot.query.filtered_by(Slot.day_id == char_current_day,
+                                  Slot.character_id == char_id,
+                                  Slot.slot_level == level,
+                                  Slot.spell_type_id is None).first()
 
+def use_slot(char_id, level, spell_id, user_note=None):
+    """Updates latest Slot object by inserting spell_type_id foreign key"""
 
-
-#initial seed
+    #retrieves slot object
+    slot_obj = get_slot(char_id=char_id, level=level)
+    
+    #assigns given var spell_id to spell_type_id attribute of retrieved slot
+    slot_obj.spell_type_id = spell_id
+    slot_obj.slot_reference = user_note
 
 if __name__ == '__main__':
     from server import app

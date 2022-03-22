@@ -22,14 +22,17 @@
             Spells known:
             <ul>
                 {% for spell in spell_dict[char.character_id] %}
-                    <li>{{ spell }}</li>
+                    <li>{{ spell.spell_name }}</li> 
+                    <button>
+                        Delete
+                    </button>
                 {% endfor %}
             </ul>
 
             <p>Actions:</br>
                 <button><a href="/level_up-{{ char.character_id }}">Level up</a></button> 
                 <button><a href="/add_spell_known-{{ char.character_id }}">Add a known spell</a></button>
-                <button><a href="/play-{{ character_id }}">Get playing!</a></button>
+                <button><a href="/play-{{ char.character_id }}">Get playing!</a></button>
             </p>
             
         </div>

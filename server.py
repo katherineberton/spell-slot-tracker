@@ -1,5 +1,5 @@
 from os import name
-from flask import Flask, render_template, render_template_string, request, flash, session, redirect
+from flask import Flask, render_template, render_template_string, request, flash, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from model import connect_to_db, db
@@ -107,15 +107,10 @@ def show_landing():
     all_spells_known = {}
 
     for character in characters:
+        #dictionary entry with key character id and value list of spells
 
-        #blank list for each character
-        spells_known = []
+        spells_known = crud.get_character_by_id(character.character_id).spells
 
-        #populate the list with the spell name associated with the id of each spell known
-        for spell in character.spells_known:
-            spells_known.append(crud.get_spell_name_by_spell_known(spell.spell_known_id))
-
-        #add an entry to spell_dict dictionary with key char id and value list
         all_spells_known[character.character_id] = spells_known
 
     return render_template('landing.html', char_list=characters, spell_dict=all_spells_known)
@@ -174,33 +169,50 @@ def add_spell_known(char_id):
 
 
 
+@app.route('/delete_spell_known-<char_id>')
+def delete_spell_known(char_id):
+    spell_slug = request.args.get()
+
+
 @app.route('/handle_add_spell-<char_id>')
 def handle_add_spell(char_id):
+    """Adds wanted spell to character's spell list"""
 
     #retrieve slug from form
     slug = request.args.get('spell_to_add')
 
-    #use slug to create new spell known
-    new_spell = crud.create_spell_known(slug)
+    #retrieve spell obj from slug
+    new_spell = crud.get_spell_by_slug(slug)
 
     #retrieve character from url
     char = crud.get_character_by_id(char_id)
 
     #append spell known to char's spells_known list
-    char.spells_known.append(new_spell)
+    char.spells.append(new_spell)
 
     db.session.commit()
 
     return redirect('/landing')
 
 
+
 @app.route('/play-<char_id>')
 def show_play_screen(char_id):
+    """Shows the tracker page"""
 
-    char = crud.get_character_by_id
-    slot_details = crud.get_slot_details_by_level_and_class()
+    char = crud.get_character_by_id(char_id)
 
-    return render_template('tracker.html')
+    return render_template('tracker.html', char=char)
+
+
+
+@app.route('/current_slot_rules-<char_id>')
+def get_current_slot_rules(char_id):
+    """Gets slot details by character's class and level"""
+
+    return jsonify(crud.get_slot_details(char_id))
+
+
 
 if __name__ == '__main__':
     connect_to_db(app)

@@ -4,8 +4,6 @@ from sqlalchemy import Integer
 db=SQLAlchemy()
 
 
-
-
 class User(db.Model):
     """One user"""
 
@@ -23,7 +21,7 @@ class User(db.Model):
                      nullable=False)
 
     # characters = a list of Character objects this user has
-    # slots = a list of Slot objects this user has used
+    # [character].slots = a list of Slot objects this user has used
 
     def __repr__(self):
         return f'<User obj id={self.user_id} name={self.name} email={self.email}>'
@@ -50,12 +48,42 @@ class Character(db.Model):
     user = db.relationship('User', backref='characters')
     player_class = db.relationship('PlayerClass', backref='characters')
 
+    spells = db.relationship("Spell", secondary="characters_spells", backref="characters")
+
     #slots = a list of Slot objects used by this character
     #days = a list of Day objects this character has created
     #spells_known = a list of SpellKnown objects this character knows
 
     def __repr__(self):
         return f'<Character obj id={self.character_id} name={self.character_name}>'
+
+
+
+class Spell(db.Model):
+    """One spell - details from API"""
+
+    __tablename__ = 'spells'
+
+    spell_type_id = db.Column(db.Integer,
+                              autoincrement=True,
+                              primary_key=True)
+    spell_slug = db.Column(db.String(100),
+                           nullable=False)
+    spell_name = db.Column(db.String(100))
+
+    def __repr__(self):
+        return f'<Spell obj id={self.spell_type_id} slug={self.spell_slug}>' 
+
+
+
+class CharacterSpell(db.Model):
+    """Spell known by a character (secondary/association table)"""
+
+    __tablename__ = 'characters_spells'
+
+    character_spell_id = db.Column(db.Integer, primary_key=True)
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.character_id'), nullable=False)
+    spell_id = db.Column(db.Integer, db.ForeignKey('spells.spell_type_id'), nullable=False)
 
 
 
@@ -78,63 +106,24 @@ class PlayerClass(db.Model):
 
 
 
-class Spell(db.Model):
-    """One spell - details from API"""
-
-    __tablename__ = 'spells'
-
-    spell_type_id = db.Column(db.Integer,
-                              autoincrement=True,
-                              primary_key=True)
-    spell_slug = db.Column(db.String(100),
-                           nullable=False)
-    spell_name = db.Column(db.String(100))
-
-    def __repr__(self):
-        return f'<Spell obj id={self.spell_type_id} slug={self.spell_slug}>' 
-
-
-
-class SpellKnown(db.Model):
-    """Spells known by a character - relevant for some but not all classes"""
-
-    __tablename__ = 'spells_known'
-
-    spell_known_id = db.Column(db.Integer,
-                              autoincrement=True,
-                              primary_key=True)
-    spell_id = db.Column(db.Integer,
-                         db.ForeignKey('spells.spell_type_id'))
-    character_id = db.Column(db.Integer,
-                             db.ForeignKey('characters.character_id'))
-
-    characters = db.relationship('Character', backref='spells_known')
-    spells = db.relationship('Spell', backref='spells_known') #probably not necessary info
-
-    def __repr__(self):
-        return f'<SpellKnown obj id={self.spell_known_id}>'
-
-
-
-
-
 class Slot(db.Model):
-    """One spell slot used"""
+    """One spell slot used
+    
+    These will be pre-generated when a user creates a new Day object, pursuant to character level and class constraints"""
 
     __tablename__ = 'slots'
 
     slot_id = db.Column(db.Integer,
                         autoincrement=True,
                         primary_key=True)
-    slot_reference = db.Column(db.String(300))
+    slot_reference = db.Column(db.String(300)) #user input
     spell_type_id = db.Column(db.Integer,
                               db.ForeignKey("spells.spell_type_id"))
     day_id = db.Column(db.Integer,
                        db.ForeignKey("days.day_id"))
     character_id = db.Column(db.Integer,
                              db.ForeignKey("characters.character_id"))
-    slot_level = db.Column(db.Integer,
-                           nullable=False)
+    slot_level = db.Column(db.Integer)
 
     day = db.relationship('Day', backref='slots')
     character = db.relationship('Character', backref='slots')
@@ -152,8 +141,8 @@ class Day(db.Model):
     day_id = db.Column(db.Integer,
                        autoincrement=True,
                        primary_key=True)
-    day_reference = db.Column(db.String(100))
-    first_session_date = db.Column(db.DateTime)
+    day_reference = db.Column(db.String(100)) #user input
+    first_session_date = db.Column(db.DateTime) #not sure if i'm going to keep this
     character_id = db.Column(db.Integer,
                         db.ForeignKey("characters.character_id"))
 

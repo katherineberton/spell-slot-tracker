@@ -10,7 +10,7 @@
 
 Which spell would you like to add? 
 
-<form action="/handle_add_spell-{{ char_id }}">
+<form action="/handle-add-spell/{{ char_id }}">
 <select name="spell_to_add">
     {% for spell in spell_options %}
         <option value="{{ spell.spell_slug }}">

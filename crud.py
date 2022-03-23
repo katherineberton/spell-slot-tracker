@@ -125,9 +125,11 @@ def create_day(char_id):
     return new_day
 
 def get_current_day(char_id):
-    """Gets most recent Day object by character id"""
+    """Gets the id of the most recent Day record by character id"""
 
-    return Day.query.filter_by(character_id=char_id).order_by(Day.day_id).first()
+    curr_day = Day.query.filter_by(character_id=char_id).order_by(Day.day_id).first()
+    
+    return curr_day.day_id
 
 
 
@@ -149,6 +151,8 @@ def create_a_slot(char_id, level):
     char_current_day = get_current_day(char_id)
     slot_used = Slot(character_id=char_id, day_id=char_current_day, slot_level=level)
 
+    return slot_used
+
 def populate_slots(char_id):
     """Prepopulates slots on creation of a new day to be updated by casting of a spell"""
     
@@ -168,6 +172,7 @@ def populate_slots(char_id):
 
 def get_highest_slot(char_id):
     """Gets highest level slot of available slots"""
+    #make this later
     pass
 
 def get_slot(char_id, level):
@@ -189,6 +194,16 @@ def use_slot(char_id, level, spell_id, user_note=None):
     #assigns given var spell_id to spell_type_id attribute of retrieved slot
     slot_obj.spell_type_id = spell_id
     slot_obj.slot_reference = user_note
+
+def cast_cantrip(char_id, spell_slug):
+    """Creates, updates and returns a Slot object"""
+
+    record = create_a_slot(char_id, 0)
+    record.spell_type_id = get_spell_id_by_slug(spell_slug)
+    record.day_id = get_current_day(char_id)
+
+    return record
+
 
 if __name__ == '__main__':
     from server import app

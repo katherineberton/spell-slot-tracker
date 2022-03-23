@@ -5,12 +5,6 @@ figure out how to get things side by side
 new crud function get all spells by class
 add rogues to classes
 my class/all classes on all spells list
-rename routes - dashes instead of underscores, slashes instead of dashes
-
-
-should i make a to_dict class method like kat j did to be able to pass objs to js?
-or should i just deal with a list of slugs?
-
 
 
 figure out how to deal with sorting characters on landing page

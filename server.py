@@ -81,7 +81,7 @@ def register():
 
 
 
-@app.route('/new_user_registration', methods=["POST"])
+@app.route('/new-user-registration', methods=["POST"])
 def handle_new_user():
     """Creates new user"""
 
@@ -110,21 +110,22 @@ def show_landing():
         #dictionary entry with key character id and value list of spells
 
         spells_known = crud.get_character_by_id(character.character_id).spells
-
         all_spells_known[character.character_id] = spells_known
+
+
 
     return render_template('landing.html', char_list=characters, spell_dict=all_spells_known)
 
 
 
-@app.route(f'/create_a_character')
+@app.route(f'/create-a-character')
 def get_character_details():
 
     return render_template('create_a_character.html')
 
 
 
-@app.route('/new_char_registration', methods=["POST"])
+@app.route('/new-char-registration', methods=["POST"])
 def create_a_character():
     """Creates new character"""
 
@@ -142,13 +143,16 @@ def create_a_character():
     curr_user = crud.get_user_by_id(session['user_id'])
     curr_user.characters.append(new_char)
 
+    #create a new casting day for new_char and add to db
+    db.session.add(crud.create_day(new_char.character_id))
+
     db.session.commit()
 
     return redirect('/landing')
 
     
 
-@app.route('/level_up-<char_id>')
+@app.route('/level-up/<char_id>')
 def increase_char_level(char_id):
     """Increase character level"""
 
@@ -159,7 +163,7 @@ def increase_char_level(char_id):
 
 
 
-@app.route('/add_spell_known-<char_id>')
+@app.route('/add-spell-known/<char_id>')
 def add_spell_known(char_id):
     """Shows spell list"""
     #adjust this later to filter for spells that only the character's class can use
@@ -169,7 +173,7 @@ def add_spell_known(char_id):
 
 
 
-@app.route('/delete_spell_known-<char_id>')
+@app.route('/delete-spell-known/<char_id>')
 def delete_spell_known(char_id):
 
     spell_slug = request.args.get('spell_to_delete')
@@ -180,7 +184,7 @@ def delete_spell_known(char_id):
     return redirect('/landing')
 
 
-@app.route('/handle_add_spell-<char_id>')
+@app.route('/handle-add-spell/<char_id>')
 def handle_add_spell(char_id):
     """Adds wanted spell to character's spell list"""
 
@@ -202,17 +206,18 @@ def handle_add_spell(char_id):
 
 
 
-@app.route('/play-<char_id>')
+@app.route('/play/<char_id>')
 def show_play_screen(char_id):
     """Shows the tracker page"""
 
     char = crud.get_character_by_id(char_id)
+    current_day = crud.get_current_day(char_id)
 
-    return render_template('tracker.html', char=char)
+    return render_template('tracker.html', char=char, current_day=current_day)
 
 
 
-@app.route('/current_slot_rules-<char_id>')
+@app.route('/current-slot-rules/<char_id>')
 def get_current_slot_rules(char_id):
     """Gets slot details by character's class and level"""
 
@@ -220,16 +225,29 @@ def get_current_slot_rules(char_id):
 
 
 
-@app.route('/list_spells_known-<char_id>')
+@app.route('/list-spells-known/<char_id>')
 def list_spells_known(char_id):
     """Returns list of spells known by a character"""
 
     return jsonify(crud.get_spells_known(char_id))
 
 
-@app.route('/test-json')
-def test_json():
-    return 'x'
+
+@app.route('/cast-cantrip/<char_id>')
+def handle_cast_cantrip(char_id):
+    """Adds a cantrip to the db under the given character"""
+
+    print('\n'*20)
+    slug = request.args.get('spell-slug')
+    print(slug)
+    cantrip = crud.cast_cantrip(char_id=char_id, spell_slug=slug)
+    print(cantrip)
+    db.session.add(cantrip)
+    db.session.commit()
+
+    return 'success'
+
+
 
 if __name__ == '__main__':
     connect_to_db(app)

@@ -11,18 +11,22 @@
 {% block body %}
     <!-- hidden input with char id so its value can be query selected-->
     <input type="hidden" id="char-id" value="{{ char.character_id }}">
+    {% if current_day %}
 
-    <section id="spells-known">
-        {{ char.character_name.upper() }}'S SPELLS KNOWN
-        <ul></ul>
-    </section>
-    <section id="board">
-        SLOTS
-        <container id="slot-buttons-container">
+        <section id="spells-known">
+            {{ char.character_name.upper() }}'S SPELLS KNOWN
+            <ul></ul>
+        </section>
+        <section id="board">
+            SLOTS
+            <container id="slot-buttons-container">
 
-        </container>
-    </section>
+            </container>
+        </section>
 
+    {% else %}
+        <button class="start-button">Start playing.</button>
+    {% endif %}
     <script src="/static/js/tracker.js"></script>
 {% endblock %}
 

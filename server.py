@@ -220,6 +220,17 @@ def get_current_slot_rules(char_id):
 
 
 
+@app.route('/list_spells_known-<char_id>')
+def list_spells_known(char_id):
+    """Returns list of spells known by a character"""
+
+    return jsonify(crud.get_spells_known(char_id))
+
+
+@app.route('/test-json')
+def test_json():
+    return 'x'
+
 if __name__ == '__main__':
     connect_to_db(app)
 

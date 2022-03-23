@@ -104,6 +104,15 @@ def delete_spell_known(char_id, spell_slug):
 
     char.spells.remove(spell)
 
+def get_spells_known(char_id):
+    """Queries db for Spell objs associated with Character matching char_id
+    
+    Returns a list of each spell's slug"""
+
+    spell_slugs = [spell.spell_slug for spell in Character.query.get(char_id).spells]
+
+    return spell_slugs
+
 
 
 #---------------------------------------managing days

@@ -51,6 +51,12 @@ def level_character_up_by_id(char_id):
     char = get_character_by_id(char_id)
     char.character_level += 1
 
+def char_multiclass(char_id):
+    """Changes character's class to multiclass"""
+
+    char = get_character_by_id(char_id)
+    char.class_id = get_class_id_by_slug('multiclass')
+
 
 
 #----------------------------------------managing classes
@@ -70,6 +76,13 @@ def get_class_by_slug(slug):
     """Queries db for PlayerClass obj with matching slug, returns it"""
 
     return PlayerClass.query.filter(PlayerClass.class_slug == slug).first()
+
+def get_class_id_by_slug(slug):
+    """Queries db for PlayerClass obj with matching slug, returns it"""
+
+    class_obj = PlayerClass.query.filter(PlayerClass.class_slug == slug).first()
+    
+    return class_obj.class_id
 
 
 
@@ -154,21 +167,24 @@ def create_a_slot(char_id, level):
     return slot_used
 
 def populate_slots(char_id):
-    """Prepopulates slots on creation of a new day to be updated by casting of a spell"""
+    """Prepopulates and returns slots on creation of a new day
     
-    char = get_character_by_id(char_id)
-    char_class = get_class_by_id(char.class_id).class_slug
-    char_level = char.character_level
+    No spell details at first - they will be updated when they are used.
+    """
+    blank_slots = []
 
     #at each casting level, 1 through 9
     for i in range(1,10):
 
-        #retrieve the total number of slots from slot_rules
-        num_slots = get_slot_details(player_class=char_class, player_level=char_level)[f'max_slots_{i}']
+        #retrieve the total number of slots in a day from slot_rules
+        num_slots = get_slot_details(char_id)[f'max_slots_{i}']
 
         #create that many blank slots at that level
         for j in range(num_slots):
-            create_a_slot(char_id=char_id, level=i)
+            blank_slots.append(create_a_slot(char_id=char_id, level=i)) #automatically assigns day = current day
+
+    return blank_slots
+
 
 def get_highest_slot(char_id):
     """Gets highest level slot of available slots"""
@@ -178,15 +194,15 @@ def get_highest_slot(char_id):
 def get_slot(char_id, level):
     """Queries db for first empty Slot object with matching character id and day id at the specified level"""
 
-    char_current_day = get_current_day(char_id).day_id
+    char_current_day = get_current_day(char_id)
 
-    return Slot.query.filtered_by(Slot.day_id == char_current_day,
-                                  Slot.character_id == char_id,
+    return Slot.query.filter(Slot.day_id == char_current_day,
                                   Slot.slot_level == level,
-                                  Slot.spell_type_id is None).first()
+                                  Slot.spell_type_id == None,
+                                  Slot.slot_reference == None).first()
 
-def use_slot(char_id, level, spell_id, user_note=None):
-    """Updates latest Slot object by inserting spell_type_id foreign key"""
+def use_slot(char_id, level, spell_id=None, user_note=None):
+    """Updates latest unused Slot object by inserting spell_type_id foreign key"""
 
     #retrieves slot object
     slot_obj = get_slot(char_id=char_id, level=level)

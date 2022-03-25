@@ -1,14 +1,21 @@
 
 
-
+https://getbootstrap.com/docs/5.0/components/modal/
+deal with bootstrap right now just do it
 figure out how to get things side by side
 new crud function get all spells by class
 add rogues to classes
 my class/all classes on all spells list
+add populate_slots to create_day
+add event handler to long rest button
+add event handler to short rest button for warlocks
+add "get back slot" ability for sorcerers
+condense crud functions and function calls that can be condensed
+get warlock shit
 
 
 figure out how to deal with sorting characters on landing page
-figure out how to get max slot available
+figure out how to get max slot available better
 custom classes?
 
 

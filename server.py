@@ -1,3 +1,4 @@
+from crypt import methods
 from os import name
 from flask import Flask, render_template, render_template_string, request, flash, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -9,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = "dev-mode"
 
 
+#------------------------------------------------------------------setup
 
 
 @app.route('/')
@@ -126,7 +128,7 @@ def get_character_details():
 
 
 @app.route('/new-char-registration', methods=["POST"])
-def create_a_character():
+def handle_new_character():
     """Creates new character"""
 
     new_char_name = request.form.get('char-name')
@@ -141,16 +143,50 @@ def create_a_character():
 
     #get user object from user_id in session and append to its list of Character objs
     curr_user = crud.get_user_by_id(session['user_id'])
-    curr_user.characters.append(new_char)
+    curr_user.characters.append(new_char) #this gives it a character ID
 
     #create a new casting day for new_char and add to db
     db.session.add(crud.create_day(new_char.character_id))
+
+    #populates slots for the new day
+    db.session.add_all(crud.populate_slots(new_char.character_id))
 
     db.session.commit()
 
     return redirect('/landing')
 
     
+
+@app.route('/update-character/<char_id>')
+def update_character(char_id):
+    """Prompts user for updated character information"""
+
+    char = crud.get_character_by_id(char_id)
+
+    return render_template('update_character.html', char=char)
+
+
+
+@app.route('/handle-character-update/<char_id>', methods=["POST"])
+def handle_character_update(char_id):
+    """Updates character in db"""
+    
+    char = crud.get_character_by_id(char_id)
+    print(char)
+
+    multi = request.form.get('multiclassing')
+    caster_level = request.form.get('char-level')
+
+    if multi:
+        crud.char_multiclass(char_id)
+
+    char.character_level = caster_level
+    
+    db.session.commit()
+
+    return redirect('/landing')
+
+
 
 @app.route('/level-up/<char_id>')
 def increase_char_level(char_id):
@@ -206,15 +242,44 @@ def handle_add_spell(char_id):
 
 
 
+
+
+#------------------------------------------------------------------tracker
+
+
 @app.route('/play/<char_id>')
 def show_play_screen(char_id):
     """Shows the tracker page"""
 
     char = crud.get_character_by_id(char_id)
     current_day = crud.get_current_day(char_id)
+    spell_options = crud.get_all_spells()
+    slot_details = crud.get_slot_details(char_id)
+    spells_known = crud.get_spells_known(char_id)
 
-    return render_template('tracker.html', char=char, current_day=current_day)
+    return render_template('tracker.html',
+                            char=char,
+                            current_day=current_day,
+                            spell_options=spell_options,
+                            slot_details=slot_details,
+                            spells_known=spells_known)
 
+
+
+@app.route('/handle-long-rest/<char_id>')
+def handle_long_rest(char_id):
+
+    db.session.add(crud.create_day(char_id))
+    db.session.commit()
+
+    db.session.add_all(crud.populate_slots(char_id))
+    db.session.commit()
+    
+    return redirect(f'/play/{char_id}')
+
+
+
+#------------------------------------------------db stuff for fetch requests
 
 
 @app.route('/current-slot-rules/<char_id>')
@@ -237,15 +302,41 @@ def list_spells_known(char_id):
 def handle_cast_cantrip(char_id):
     """Adds a cantrip to the db under the given character"""
 
-    print('\n'*20)
     slug = request.args.get('spell-slug')
-    print(slug)
+
     cantrip = crud.cast_cantrip(char_id=char_id, spell_slug=slug)
-    print(cantrip)
+
     db.session.add(cantrip)
     db.session.commit()
 
     return 'success'
+
+
+
+@app.route('/handle-use-slot/<char_id>', methods=["POST"])
+def handle_use_slot(char_id):
+
+    spell_cast = request.form.get("spell-cast")
+    spell_level = request.form.get("spell-level")
+    user_note = request.form.get("note")
+    
+    #if this slot not used for a spell
+    if spell_cast == "other":
+
+        #use slot with no spell, user note
+        crud.use_slot(char_id=char_id, level=spell_level, user_note=user_note)
+    
+    #if it was used for a spell 
+    else:
+
+        #retrieve id from spell slug and use slot with that spell
+        spell_cast_id = crud.get_spell_id_by_slug(spell_cast)
+        crud.use_slot(char_id=char_id, level=spell_level, spell_id=spell_cast_id, user_note=user_note)
+
+    db.session.commit()
+
+    return redirect(f'/play/{char_id}')
+
 
 
 

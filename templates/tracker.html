@@ -11,22 +11,58 @@
 {% block body %}
     <!-- hidden input with char id so its value can be query selected-->
     <input type="hidden" id="char-id" value="{{ char.character_id }}">
+
     {% if current_day %}
+        <section id="menu">
+            <button id="long-rest"><a href='/handle-long-rest/{{ char.character_id }}'>Long Rest</a></button>
+            {% if char.class_id == 11 %}
+                <button id="short-rest">Short Rest</button>
+            {% endif %}
+        </section>
+
 
         <section id="spells-known">
             {{ char.character_name.upper() }}'S SPELLS KNOWN
             <ul></ul>
         </section>
-        <section id="board">
-            SLOTS
-            <container id="slot-buttons-container">
 
+
+        <section id="board">
+            SLOTS 
+            <container id="slot-buttons-container">
+                {% for level in slot_details.keys() %}
+                    {% if slot_details[level] > 0 and level != 'cantrips_known' %}
+                        <p>Level {{ level[-1] }} slots: {{ slot_details[level] }}</p>
+                        {% for i in range(1,slot_details[level]+1) %}
+                            <div class="inline">
+                                Level {{ level[-1] }} Slot
+                                <form action="/handle-use-slot/{{ char.character_id }}"
+                                 method="POST"
+                                 id="form-{{ level[-1] }}-{{ i }}">
+                                    <input type="hidden" name="spell-level" value="{{ level[-1] }}">
+                                    Spell to cast: <select name="spell-cast">
+                                        <option value="other">No spell - add note</option>
+                                        {% for spell in spell_options %}
+                                            <option value="{{ spell.spell_slug }}">
+                                                {{ spell.spell_name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <input name="note">
+                                    <button type="submit">CAST</button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
             </container>
         </section>
 
     {% else %}
         <button class="start-button">Start playing.</button>
     {% endif %}
+
+
     <script src="/static/js/tracker.js"></script>
 {% endblock %}
 

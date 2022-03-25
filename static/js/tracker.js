@@ -1,7 +1,7 @@
 /*
 
 
-notes
+add event handler to long rest button
 
 
 */
@@ -27,12 +27,39 @@ function spell_details_fetch(spell_slug) {
   )
 }
 
-//casts cantrip and records in db
+//casts cantrip and records in db by sending to flask route
 function castCantrip(spellSlug) {
   //trigger the flask route that adds a cantrip to the db
+  console.log(spellSlug)
   fetch(`/cast-cantrip/${charId}?spell-slug=${spellSlug}`)
 }
 
+
+//casts spell and records in db by sending to flask route
+function castSpell(spellSlug, level, userNote=null) {
+
+  const formInputs = {
+    spellCast: spellSlug,
+    spellLevel: level,
+    note: userNote,
+  }
+
+  fetch(
+    `/handle-use-slot/${charId}`,
+    {
+      method: 'POST',
+      body: JSON.stringify(formInputs),
+      headers: { 'Content-type': 'application/json', }
+    }
+  )
+}
+
+
+function hi() {
+  alert('hi')
+}
+
+//-----------------------------------------menu
 
 
 
@@ -62,7 +89,11 @@ fetch(`/list-spells-known/${charId}`)
           //create the button
           spellsKnown.insertAdjacentHTML(
             'beforeend',
-            `<li><button class="cast" id="${spell}">${info.name}</button></li>`
+            `<li><button class="cast-cantrip-button"
+                         id="${spell}"
+                         value="${spell}">
+                 ${info.name}
+                 </button></li>`
           )
           
           //add the "castCantrip" event listener to it
@@ -72,7 +103,6 @@ fetch(`/list-spells-known/${charId}`)
           );
         })
     }
-
   }
 )
 
@@ -88,29 +118,31 @@ fetch(`/list-spells-known/${charId}`)
 
 const board = document.querySelector('#board')
 
-fetch(`/current-slot-rules/${charId}`)
-  .then(res => res.json())
-  .then(maxSlots => {
-    for (const level in maxSlots) {
+          // document.querySelector(`#slot-${castingLevel}-${i}`).addEventListener(
+          //   'click',
+          //   () => hi()
+          // )
+          
+          //if i make a form to allow the user to select the spell,
+          //how do i send it back to the dom
+          //so that the event listener on the button can read it?
 
-      // if there are slots at this level, and it's not a cantrip
-      if (maxSlots[level] > 0 && level !== 'cantrips_known') {
+          //for now i can set the form to be visible always and remove the event handler
+          //on the cast button
 
-        castingLevel = level.slice(-1);
-        slotsPerDay = maxSlots[level];
+          //can i put a form inside a button of submit type and have the encircling button 
+          //be submit for the form?
+          
+          
+          //an event listener that on a click generates a bootstrap modal or something with a form inside with the drop down of all spells (for now)
+          //the form will send info to a flask route that updates the db via a post request i guess
+            //think about what data needs to be sent - slot level
+          //the form will have a submit button
+          //the submit button on the form will have an event listener that changes the button to say "used" and gives it details on what it was used for
+          //handler can be defined outside of the fetch
 
-        //tell how many slots per day at the casting level
-        board.insertAdjacentHTML('beforeend', `<p>Level ${castingLevel} slots: ${slotsPerDay}</p>`);
+// function handleCasting(btn) {
+//   //etc
 
-        //make that many buttons
-        for (let i = 1; i <= slotsPerDay; i++) {
-          board.insertAdjacentHTML('beforeend', `<button class="cast-${castingLevel}">Level ${castingLevel} CAST</button>`);
-          //add event listeners for this button here
-        }
-      }
-    }
-  }
-)
-
-
+// }
 

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Spell slot tracker{% endblock %}
+
+{% block js %}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block first_header %}{% endblock %}
+
+{% block body %}
+<form action="/handle-character-update/{{ char.character_id }}" method="POST">
+    <p>Is {{ char.character_name }} multiclassing? <input type="checkbox" name="multiclassing">Yes, {{ char.character_name }} is multiclassing.</p>
+    <p>What's {{ char.character_name }}'s new total caster level, if any? Read more about multiclassing rules and total caster level <a href="https://5thsrd.org/rules/multiclassing/">here</a>.</p>
+    {% for num in range(1,21) %}
+        <input type="radio" name="char-level" value={{ num }}>{{ num }}
+    {% endfor %}
+    <p><button type="submit">Update</button></p>
+</form>
+{% endblock %}
+
+{% block after_body %}{% endblock %}

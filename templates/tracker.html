@@ -38,26 +38,10 @@
                                     class="btn btn-primary"
                                     data-bs-toggle="modal"
                                     data-bs-target="#spellModal" 
-                                    slotLevel="{{ level[-1] }}">
+                                    slotLevel="{{ level[-1] }}"
+                                    id="cast-level-{{level[-1]}}-pos-{{i}}">
                                         LEVEL {{ level[-1] }} CAST
-                            </button>
-                            <!-- <form action="/handle-use-slot/{{ char.character_id }}"
-                                method="POST"
-                                id="form-{{ level[-1] }}-{{ i }}">
-                                <input type="hidden" name="spell-level" value="{{ level[-1] }}">
-                                Spell to cast: <select name="spell-cast">
-                                    <option value="other">No spell - add note</option>
-                                    {% for spell in spell_options %}
-                                        <option value="{{ spell.spell_slug }}">
-                                            {{ spell.spell_name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                <input name="note">
-                                <button type="submit">CAST</button>
-                            </form>
-                                              OLD VERSION ABOVE --> 
-                            
+                            </button>                            
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -66,6 +50,8 @@
     </section>
     
     <div class="modal fade" id="spellModal" tabindex="-1" aria-hidden="true">
+      <input type="hidden" name="slot-used" id="slot-used">
+      <input type="hidden" name="button-used" id="button-used">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -76,9 +62,9 @@
             <form id="castingForm" name="castingForm">
               <div class="mb-3">
                 <select name="spell-cast" id="spell-cast">
-                    <option value="other">No spell - add note</option>
+                    <option id="dropdown-other" value="other">No spell - add note</option>
                     {% for spell in spell_options %}
-                        <option value="{{ spell.spell_slug }}">
+                        <option name="{{ spell.spell_name}}" id="dropdown-{{ spell.spell_slug }}" value="{{ spell.spell_slug }}">
                             {{ spell.spell_name }}
                         </option>
                     {% endfor %}
@@ -88,7 +74,7 @@
                 Note:
                 <textarea name="note" id="note"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Cast spell</button>
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Cast spell</button>
             </form>
           </div>
         </div>

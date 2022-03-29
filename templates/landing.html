@@ -13,16 +13,11 @@
         {% for char in char_list %}
             <div class="character-summary col bg-light" id="{{ char.character_id }}">
                 <div class="row">
-                {{ char.character_name }}
-
-                <uL>
-                    <li>Class: {{ char.player_class.class_name}}</li>
-                    <li>Level: {{ char.character_level }}</li>
-                </uL>
+                {{ char.character_name }} | Class: {{ char.player_class.class_name }} | Level: {{ char.character_level }}
                 </div>
 
                 <div class="row">
-                    <p>Spells known:</p>
+                    <p>Cantrips known:</p>
                 
                     {% for spell in spell_dict[char.character_id] %}
                         <div class="col">
@@ -36,11 +31,12 @@
                     {% endfor %}
                 </ul>
                 </div>
+
                 <div class="row" id="actions-bar">
                     <p>Actions:</br>
                         <div class="col"><button><a href="/level-up/{{ char.character_id }}">Level up</a></button></div>
                         <div class="col"><button><a href="/update-character/{{ char.character_id }}">Update class</a></button></div>
-                        <div class="col"><button><a href="/add-spell-known/{{ char.character_id }}">Add a known spell</a></button></div>
+                        <div class="col"><button><a href="/add-spell-known/{{ char.character_id }}">Add a cantrip</a></button></div>
                         <div class="col"><button><a href="/play/{{ char.character_id }}">Get playing!</a></button></div>
                     </p>
                 </div>

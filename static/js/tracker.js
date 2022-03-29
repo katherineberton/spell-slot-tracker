@@ -116,33 +116,33 @@ fetch(`/list-spells-known/${charId}`)
 
 //------------------------------------------------board
 
-const board = document.querySelector('#board')
+const spellModal = document.querySelector('#spellModal');
 
-          // document.querySelector(`#slot-${castingLevel}-${i}`).addEventListener(
-          //   'click',
-          //   () => hi()
-          // )
-          
-          //if i make a form to allow the user to select the spell,
-          //how do i send it back to the dom
-          //so that the event listener on the button can read it?
+spellModal.addEventListener('show.bs.modal', (evt) => {
+  const slotLevel = evt.relatedTarget.getAttribute('slotLevel');
+  
+  const slotSpan = document.querySelector('#slotSpan');
+  
+  slotSpan.innerText = slotLevel;
+  slotSpan.setAttribute("value", slotLevel)
+})
 
-          //for now i can set the form to be visible always and remove the event handler
-          //on the cast button
+const spellCastForm = document.querySelector('#castingForm')
 
-          //can i put a form inside a button of submit type and have the encircling button 
-          //be submit for the form?
-          
-          
-          //an event listener that on a click generates a bootstrap modal or something with a form inside with the drop down of all spells (for now)
-          //the form will send info to a flask route that updates the db via a post request i guess
-            //think about what data needs to be sent - slot level
-          //the form will have a submit button
-          //the submit button on the form will have an event listener that changes the button to say "used" and gives it details on what it was used for
-          //handler can be defined outside of the fetch
+spellCastForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
 
-// function handleCasting(btn) {
-//   //etc
+  const formInputs = {
+    slotLevel: document.querySelector('#slotSpan').getAttribute('value'),
+    spellCast: document.querySelector('#spell-cast').value,
+    note: document.querySelector('#note').value,
+  };
 
-// }
-
+  fetch(`/handle-use-slot/${charId}`, {
+    method: 'POST',
+    body: JSON.stringify(formInputs),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+})

@@ -12,55 +12,88 @@
     <!-- hidden input with char id so its value can be query selected-->
     <input type="hidden" id="char-id" value="{{ char.character_id }}">
 
-    {% if current_day %}
-        <section id="menu">
-            <button id="long-rest"><a href='/handle-long-rest/{{ char.character_id }}'>Long Rest</a></button>
-            {% if char.class_id == 11 %}
-                <button id="short-rest">Short Rest</button>
-            {% endif %}
-        </section>
+    <section id="menu">
+        <button id="long-rest"><a href='/handle-long-rest/{{ char.character_id }}'>Long Rest</a></button>
+        {% if char.class_id == 11 %}
+            <button id="short-rest">Short Rest</button>
+        {% endif %}
+    </section>
 
 
-        <section id="spells-known">
-            {{ char.character_name.upper() }}'S SPELLS KNOWN
-            <ul></ul>
-        </section>
+    <section id="spells-known">
+        {{ char.character_name.upper() }}'S SPELLS KNOWN
+        <ul></ul>
+    </section>
 
 
-        <section id="board">
-            SLOTS 
-            <container id="slot-buttons-container">
-                {% for level in slot_details.keys() %}
-                    {% if slot_details[level] > 0 and level != 'cantrips_known' %}
-                        <p>Level {{ level[-1] }} slots: {{ slot_details[level] }}</p>
-                        {% for i in range(1,slot_details[level]+1) %}
-                            <div class="inline">
-                                Level {{ level[-1] }} Slot
-                                <form action="/handle-use-slot/{{ char.character_id }}"
-                                 method="POST"
-                                 id="form-{{ level[-1] }}-{{ i }}">
-                                    <input type="hidden" name="spell-level" value="{{ level[-1] }}">
-                                    Spell to cast: <select name="spell-cast">
-                                        <option value="other">No spell - add note</option>
-                                        {% for spell in spell_options %}
-                                            <option value="{{ spell.spell_slug }}">
-                                                {{ spell.spell_name }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                    <input name="note">
-                                    <button type="submit">CAST</button>
-                                </form>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-            </container>
-        </section>
-
-    {% else %}
-        <button class="start-button">Start playing.</button>
-    {% endif %}
+    <section id="board">
+        SLOTS 
+        <container id="slot-buttons-container">
+            {% for level in slot_details.keys() %}
+                {% if slot_details[level] > 0 and level != 'cantrips_known' %}
+                    <p>Level {{ level[-1] }} slots per day: {{ slot_details[level] }}</p>
+                    {% for i in range(1,slot_details[level]+1) %}
+                        <div class="inline">
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#spellModal" 
+                                    slotLevel="{{ level[-1] }}">
+                                        LEVEL {{ level[-1] }} CAST
+                            </button>
+                            <!-- <form action="/handle-use-slot/{{ char.character_id }}"
+                                method="POST"
+                                id="form-{{ level[-1] }}-{{ i }}">
+                                <input type="hidden" name="spell-level" value="{{ level[-1] }}">
+                                Spell to cast: <select name="spell-cast">
+                                    <option value="other">No spell - add note</option>
+                                    {% for spell in spell_options %}
+                                        <option value="{{ spell.spell_slug }}">
+                                            {{ spell.spell_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <input name="note">
+                                <button type="submit">CAST</button>
+                            </form>
+                                              OLD VERSION ABOVE --> 
+                            
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </container>
+    </section>
+    
+    <div class="modal fade" id="spellModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">What do you want to use this level <span name="slotSpan" id="slotSpan"></span> slot for?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="castingForm" name="castingForm">
+              <div class="mb-3">
+                <select name="spell-cast" id="spell-cast">
+                    <option value="other">No spell - add note</option>
+                    {% for spell in spell_options %}
+                        <option value="{{ spell.spell_slug }}">
+                            {{ spell.spell_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+              </div>
+              <div class="mb-3">
+                Note:
+                <textarea name="note" id="note"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Cast spell</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
     <script src="/static/js/tracker.js"></script>

@@ -316,9 +316,9 @@ def handle_cast_cantrip(char_id):
 @app.route('/handle-use-slot/<char_id>', methods=["POST"])
 def handle_use_slot(char_id):
 
-    spell_cast = request.form.get("spell-cast")
-    spell_level = request.form.get("spell-level")
-    user_note = request.form.get("note")
+    spell_cast = request.json.get("spellCast")
+    spell_level = request.json.get("slotLevel")
+    user_note = request.json.get("note")
     
     #if this slot not used for a spell
     if spell_cast == "other":
@@ -335,7 +335,7 @@ def handle_use_slot(char_id):
 
     db.session.commit()
 
-    return redirect(f'/play/{char_id}')
+    return 'success'
 
 
 

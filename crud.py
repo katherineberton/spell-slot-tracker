@@ -140,7 +140,7 @@ def create_day(char_id):
 def get_current_day(char_id):
     """Gets the id of the most recent Day record by character id"""
 
-    curr_day = Day.query.filter_by(character_id=char_id).order_by(Day.day_id).first()
+    curr_day = Day.query.filter_by(character_id=char_id).order_by(Day.day_id.desc()).first()
     
     return curr_day.day_id
 
@@ -185,7 +185,6 @@ def populate_slots(char_id):
 
     return blank_slots
 
-
 def get_highest_slot(char_id):
     """Gets highest level slot of available slots"""
     #make this later
@@ -219,6 +218,41 @@ def cast_cantrip(char_id, spell_slug):
     record.day_id = get_current_day(char_id)
 
     return record
+
+def get_slots_used_today_by_char(char_id):
+    """Queries db for slots used in the character's current day"""
+
+    char_current_day = get_current_day(char_id)
+
+    slot_objs = Slot.query.filter(
+                                Slot.day_id == char_current_day,
+                                (Slot.spell_type_id != None) | (Slot.slot_reference != None)
+                                ).all()
+    
+    slot_list = []
+
+    for slot in slot_objs:
+        if slot.spell_type_id:
+            slot_list.append({
+                'level': slot.slot_level,
+                'spell_name': Spell.query.get(slot.spell_type_id).spell_name,
+                'note': None
+            })
+        else:
+            slot_list.append({
+                'level': slot.slot_level,
+                'spell_name': None,
+                'note': slot.slot_reference
+            })
+
+    return slot_list
+
+def get_all_slots_today(char_id):
+    """Queries db and returns list of all slot objs for a character's current day"""
+
+    curr_day = get_current_day(char_id)
+
+    return Slot.query.filter(Slot.day_id == curr_day).all()
 
 
 if __name__ == '__main__':

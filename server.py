@@ -256,13 +256,17 @@ def show_play_screen(char_id):
     spell_options = crud.get_all_spells()
     slot_details = crud.get_slot_details(char_id)
     spells_known = crud.get_spells_known(char_id)
+    slots_used_today = crud.get_slots_used_today_by_char(char_id)
+    total_day_slots = crud.get_all_slots_today(char_id)
 
     return render_template('tracker.html',
                             char=char,
                             current_day=current_day,
                             spell_options=spell_options,
                             slot_details=slot_details,
-                            spells_known=spells_known)
+                            spells_known=spells_known,
+                            slots_used_today=slots_used_today,
+                            total_day_slots=total_day_slots)
 
 
 

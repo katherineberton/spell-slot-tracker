@@ -127,9 +127,11 @@ spellCastForm.addEventListener('submit', (evt) => {
   //if slot used on a spell, retrieves spellName for dom manip from option element in form
   if (spellCast != "other") {
     spellName = document.querySelector(`#dropdown-${spellCast}`).getAttribute('name');
+    note = null;
+  } else {
+    note = document.querySelector('#note').value;
   }
-  //retrieves note for fetch req from form input
-  note = document.querySelector('#note').value;
+ 
 
   //sets up fetch request
   const formInputs = {

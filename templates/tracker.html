@@ -6,7 +6,7 @@
 
 {% block head %}{% endblock %}
 
-{% block first_header %}Slot tracker page{% endblock %}
+{% block first_header %}{% endblock %}
 
 {% block body %}
     <!-- hidden input with char id so its value can be query selected-->
@@ -14,6 +14,7 @@
 
     <section id="menu">
         <button id="long-rest"><a href='/handle-long-rest/{{ char.character_id }}'>Long Rest</a></button>
+
         {% if char.class_id == 11 %}
             <button id="short-rest">Short Rest</button>
         {% endif %}
@@ -21,7 +22,7 @@
 
 
     <section id="spells-known">
-        {{ char.character_name.upper() }}'S SPELLS KNOWN
+        {{ char.character_name.upper() }}'S CANTRIPS
         <ul></ul>
     </section>
 
@@ -29,25 +30,41 @@
     <section id="board">
         SLOTS 
         <container id="slot-buttons-container">
-            {% for level in slot_details.keys() %}
-                {% if slot_details[level] > 0 and level != 'cantrips_known' %}
-                    <p>Level {{ level[-1] }} slots per day: {{ slot_details[level] }}</p>
-                    {% for i in range(1,slot_details[level]+1) %}
-                        <div class="inline">
-                            <button type="button"
-                                    class="btn btn-primary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#spellModal" 
-                                    slotLevel="{{ level[-1] }}"
-                                    id="cast-level-{{level[-1]}}-pos-{{i}}">
-                                        LEVEL {{ level[-1] }} CAST
-                            </button>                            
-                        </div>
-                    {% endfor %}
+          <!-- get Shalini's thoughts on this part because YIKES-->
+          {% for level in slot_details.keys() %}
+            {% if slot_details[level] > 0 and level != 'cantrips_known' %}
+              <p>Level {{ level[-1] }} slots per day: {{ slot_details[level] }}</p>
+              {% for slot in total_day_slots %}
+                {% if slot.slot_level == level[-1]|int %}
+                  {% if slot.spell_type_id %}
+                    <button class="btn btn-primary" disabled=true>{{ slot.spell_type_id }}</button>
+                  {% elif  slot.slot_reference %}
+                    <button class="btn btn-primary" disabled=true>{{ slot.slot_reference }}</button>
+                  {% else %}
+                  <button type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#spellModal" 
+                  slotLevel="{{ level[-1] }}"
+                  id="cast-pos-{{loop.index}}">
+                      LEVEL {{ level[-1] }} CAST
+                  </button>
+                  {% endif %}
                 {% endif %}
-            {% endfor %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
         </container>
     </section>
+
+    {% if slots_used_today|length > 0 %}
+      Slots used today:
+      <ul>
+        {% for slot in slots_used_today %}
+          <li>Level {{ slot.level }} | {% if slot.spell_name %}{{ slot.spell_name }}{% else %}{{ slot.note }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
     
     <div class="modal fade" id="spellModal" tabindex="-1" aria-hidden="true">
       <input type="hidden" name="slot-used" id="slot-used">

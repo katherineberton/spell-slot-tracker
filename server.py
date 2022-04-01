@@ -114,9 +114,9 @@ def show_landing():
         spells_known = crud.get_character_by_id(character.character_id).spells
         all_spells_known[character.character_id] = spells_known
 
+    cantrip_options = crud.get_all_cantrips()
 
-
-    return render_template('landing.html', char_list=characters, spell_dict=all_spells_known)
+    return render_template('landing.html', char_list=characters, spell_dict=all_spells_known, spell_options=cantrip_options)
 
 
 
@@ -220,12 +220,12 @@ def delete_spell_known(char_id):
     return redirect('/landing')
 
 
-@app.route('/handle-add-spell/<char_id>')
+@app.route('/handle-add-spell/<char_id>', methods=['POST'])
 def handle_add_spell(char_id):
     """Adds wanted spell to character's spell list"""
 
     #retrieve slug from form
-    slug = request.args.get('spell_to_add')
+    slug = request.form.get('cantrip-to-add')
 
     #retrieve spell obj from slug
     new_spell = crud.get_spell_by_slug(slug)

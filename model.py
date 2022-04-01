@@ -70,6 +70,7 @@ class Spell(db.Model):
     spell_slug = db.Column(db.String(100),
                            nullable=False)
     spell_name = db.Column(db.String(100))
+    spell_level = db.Column(db.Integer)
 
     def __repr__(self):
         return f'<Spell obj id={self.spell_type_id} slug={self.spell_slug}>' 

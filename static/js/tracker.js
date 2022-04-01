@@ -1,7 +1,16 @@
 /*
+turn the following things into event handlers:
+tracker page - long rest button
+landing page - 
+  level up
+  update
+  add cantrip
+  get playing
 
+modal for add cantrip:
 
-add event handler to long rest button
+use the same modal as on the trakcer page
+get the add button to show the modal
 
 
 */

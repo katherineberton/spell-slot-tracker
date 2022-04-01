@@ -34,10 +34,29 @@
 
                 <div class="row" id="actions-bar">
                     <p>Actions:</br>
-                        <div class="col"><button><a href="/level-up/{{ char.character_id }}">Level up</a></button></div>
-                        <div class="col"><button><a href="/update-character/{{ char.character_id }}">Update</a></button></div>
-                        <div class="col"><button><a href="/add-spell-known/{{ char.character_id }}">Add a cantrip</a></button></div>
-                        <div class="col"><button><a href="/play/{{ char.character_id }}">Get playing!</a></button></div>
+                        <div class="col">
+                            <form action="/level-up/{{char.character_id}}">
+                                <button class="btn btn-primary" type="submit">
+                                    Level up
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form action="/update-character/{{char.character_id}}">
+                                <button class="btn btn-primary" type="submit">
+                                    Update
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary"
+                                                 data-bs-toggle="modal"
+                                                 data-bs-target="#addSpellKnown"
+                                                 id="add-cantrip-{{ char.character_id}}">
+                                Add a cantrip
+                            </button>
+                        </div>
+                        <div class="col"><form action="/play/{{char.character_id}}"><button class="btn btn-primary" type="submit">PLAY</button></form></div>
                     </p>
                 </div>
 
@@ -50,6 +69,32 @@
 </div>
 {% endif %}
 
+<div class="modal fade" id="addSpellKnown" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">What cantrip do you want to add?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="cantrip-form" name="cantrip-form" method="POST">
+            <div class="mb-3">
+              <select name="cantrip-to-add" id="cantrip-to-add">
+                  {% for spell in spell_options %}
+                      <option name="{{ spell.spell_name}}" id="dropdown-{{ spell.spell_slug }}" value="{{ spell.spell_slug }}">
+                          {{ spell.spell_name }}
+                      </option>
+                  {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add cantrip</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/landing.js"></script>
 {% endblock %}
 
 {% block after_body %}{% endblock %}

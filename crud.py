@@ -88,10 +88,10 @@ def get_class_id_by_slug(slug):
 
 #----------------------------------------managing spells
 
-def create_spell(slug, name):
+def create_spell(slug, name, level):
     """Create and return a Spell object - initial data pop"""
 
-    new_spell = Spell(spell_slug=slug, spell_name=name)
+    new_spell = Spell(spell_slug=slug, spell_name=name, spell_level=level)
     return new_spell
 
 def get_all_spells():
@@ -131,6 +131,10 @@ def get_spell_name_by_id(spell_id):
 
     return Spell.query.get(spell_id).spell_name
 
+def get_all_cantrips():
+    """Queries db for Spell objs where level = 1"""
+
+    return Spell.query.filter(Spell.spell_level == 0)
 
 
 #---------------------------------------managing days

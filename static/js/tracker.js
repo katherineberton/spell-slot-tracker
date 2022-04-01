@@ -27,10 +27,10 @@ function spell_details_fetch(spell_slug) {
   )
 }
 
-//casts cantrip and records in db by sending to flask route
+
 function castCantrip(spellSlug) {
+
   //trigger the flask route that adds a cantrip to the db
-  console.log(spellSlug)
   fetch(`/cast-cantrip/${charId}?spell-slug=${spellSlug}`)
 }
 
@@ -91,6 +91,43 @@ fetch(`/list-spells-known/${charId}`)
 
 //------------------------------------------------board
 
+
+fetch(`/get-all-slots/${charId}`)
+  .then(res => res.json())
+  .then(slotList => {
+    
+  //for each slot in the list of slots:
+  for (const [i, slot] of slotList.entries()) {
+
+      //select the relevant section of the page
+      const buttonDiv = document.querySelector(`#buttons-level-${slot.slot_level}`)
+      
+      //if it was used by a spell, disable button and populate with spell name
+      if (slot.spell_type_id) {
+        buttonDiv.insertAdjacentHTML('beforeend', `<button class="btn btn-primary" disabled=true>${slot.spell_name}</button>`)
+      
+      //if it was used for something else, disable button and populate with note content
+      } else if (slot.slot_reference) {
+        buttonDiv.insertAdjacentHTML('beforeend', `<button class="btn btn-primary" disabled=true>${slot.slot_reference}</button>`)
+
+      //if it's still available
+      } else {
+        buttonDiv.insertAdjacentHTML('beforeend', `
+                                                  <button type="button"
+                                                  class="btn btn-primary"
+                                                  data-bs-toggle="modal"
+                                                  data-bs-target="#spellModal" 
+                                                  slotLevel="${slot.slot_level}"
+                                                  id="cast-pos-${i}">
+                                                    CAST
+                                                  </button>
+                                                  `)
+      }
+      
+    }
+  })
+
+
 const spellModal = document.querySelector('#spellModal');
 
 
@@ -149,7 +186,7 @@ spellCastForm.addEventListener('submit', (evt) => {
     },
   })
 
-  //selects the button used to generate the form, disbables it,
+  //selects the button used to generate the form, disables it,
   //displays spell cast or note on it
   const btnUsed = document.querySelector(`#${btnId}`);
   btnUsed.setAttribute("disabled", true);
@@ -160,3 +197,24 @@ spellCastForm.addEventListener('submit', (evt) => {
   }
 
 })
+
+
+const slotRecoverButtons = document.querySelectorAll('.slot-recover')
+
+for (const button of slotRecoverButtons) {
+  button.addEventListener('click', (evt) => {
+    id = evt.target.getAttribute('id')
+    level = id.charAt(id.length - 1)
+
+    fetch(`/handle-add-slot/${charId}`, {
+      method: 'POST',
+      body: JSON.stringify({slotLevel: level}),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    document.location.reload();
+  })
+}
+

@@ -22,7 +22,7 @@
                     {% for spell in spell_dict[char.character_id] %}
                         <div class="col">
                             {{ spell.spell_name }}
-                            <form action="/delete-spell-known-{{ char.character_id }}">
+                            <form action="/delete-spell-known/{{ char.character_id }}">
                                 <button name="spell_to_delete" type="submit" value="{{ spell.spell_slug }}">
                                     Delete
                                 </button>
@@ -35,7 +35,7 @@
                 <div class="row" id="actions-bar">
                     <p>Actions:</br>
                         <div class="col"><button><a href="/level-up/{{ char.character_id }}">Level up</a></button></div>
-                        <div class="col"><button><a href="/update-character/{{ char.character_id }}">Update class</a></button></div>
+                        <div class="col"><button><a href="/update-character/{{ char.character_id }}">Update</a></button></div>
                         <div class="col"><button><a href="/add-spell-known/{{ char.character_id }}">Add a cantrip</a></button></div>
                         <div class="col"><button><a href="/play/{{ char.character_id }}">Get playing!</a></button></div>
                     </p>

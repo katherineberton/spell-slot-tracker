@@ -15,8 +15,8 @@
     <section id="menu">
         <button id="long-rest"><a href='/handle-long-rest/{{ char.character_id }}'>Long Rest</a></button>
 
-        {% if char.class_id == 11 %}
-            <button id="short-rest">Short Rest</button>
+        {% if char_class == 'warlock' %}
+            <button id="short-rest"><a href='/handle-short-rest/{{ char.character_id }}'>Short Rest</a></button>
         {% endif %}
     </section>
 
@@ -28,32 +28,29 @@
 
 
     <section id="board">
-        SLOTS 
+        SLOTS
         <container id="slot-buttons-container">
-          <!-- get Shalini's thoughts on this part because YIKES-->
-          {% for level in slot_details.keys() %}
-            {% if slot_details[level] > 0 and level != 'cantrips_known' %}
-              <p>Level {{ level[-1] }} slots per day: {{ slot_details[level] }}</p>
-              {% for slot in total_day_slots %}
-                {% if slot.slot_level == level[-1]|int %}
-                  {% if slot.spell_type_id %}
-                    <button class="btn btn-primary" disabled=true>{{ slot.spell_type_id }}</button>
-                  {% elif  slot.slot_reference %}
-                    <button class="btn btn-primary" disabled=true>{{ slot.slot_reference }}</button>
-                  {% else %}
-                  <button type="button"
-                  class="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#spellModal" 
-                  slotLevel="{{ level[-1] }}"
-                  id="cast-pos-{{loop.index}}">
-                      LEVEL {{ level[-1] }} CAST
-                  </button>
-                  {% endif %}
-                {% endif %}
-              {% endfor %}
-            {% endif %}
-          {% endfor %}
+          {% if char_class != 'warlock' %}
+            {% for level in slot_details.keys() %}
+              {% if slot_details[level] > 0 and level != 'cantrips_known' %}
+                    <div id="buttons-level-{{ level[-1] }}">
+                      <p>
+                        Level {{ level[-1] }} slots per day: {{ slot_details[level] }}
+                        {% if char_class == 'wizard' %}
+                          <button class="slot-recover arcane-recovery" id="add-slot-{{ level[-1] }}">Arcane Recovery</button>
+                        {% endif %}
+                        {% if char_class == 'sorcerer' %}
+                        <button class="slot-recover sorcery-points" id="add-slot-{{ level[-1] }}">Replenish with sorcery points</button>
+                      {% endif %}
+                      </p>
+                    </div>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <div id="buttons-level-{{ slot_details['max_level'] }}">
+              Level {{ slot_details['max_level']}} slots per rest: {{ slot_details['slots']}}
+            </div>
+          {% endif %}
         </container>
     </section>
 
@@ -66,6 +63,9 @@
       </ul>
     {% endif %}
     
+
+
+    <!-- modal with form for spell selection-->
     <div class="modal fade" id="spellModal" tabindex="-1" aria-hidden="true">
       <input type="hidden" name="slot-used" id="slot-used">
       <input type="hidden" name="button-used" id="button-used">

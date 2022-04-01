@@ -252,26 +252,25 @@ def show_play_screen(char_id):
     """Shows the tracker page"""
 
     char = crud.get_character_by_id(char_id)
-    current_day = crud.get_current_day(char_id)
+    char_class = char.player_class.class_slug
     spell_options = crud.get_all_spells()
     slot_details = crud.get_slot_details(char_id)
     spells_known = crud.get_spells_known(char_id)
     slots_used_today = crud.get_slots_used_today_by_char(char_id)
-    total_day_slots = crud.get_all_slots_today(char_id)
 
     return render_template('tracker.html',
                             char=char,
-                            current_day=current_day,
                             spell_options=spell_options,
                             slot_details=slot_details,
                             spells_known=spells_known,
                             slots_used_today=slots_used_today,
-                            total_day_slots=total_day_slots)
+                            char_class=char_class)
 
 
 
 @app.route('/handle-long-rest/<char_id>')
 def handle_long_rest(char_id):
+    """Creates new Day record, creates Slot records on that day"""
 
     db.session.add(crud.create_day(char_id))
     db.session.commit()
@@ -279,6 +278,31 @@ def handle_long_rest(char_id):
     db.session.add_all(crud.populate_slots(char_id))
     db.session.commit()
     
+    return redirect(f'/play/{char_id}')
+
+
+@app.route('/handle-short-rest/<char_id>')
+def handle_short_rest(char_id):
+    """WARLOCKS ONLY
+    Creates more Slot records on the current day, does not create new day"""
+
+    db.session.add_all(crud.populate_slots(char_id))
+    db.session.commit()
+
+    return redirect(f'/play/{char_id}')
+
+@app.route('/handle-add-slot/<char_id>', methods=['POST'])
+def handle_arcane_recovery(char_id):
+    """WIZARDS AND SORCERERS ONLY
+    Creates one slot on the current day"""
+
+    level = request.json.get('slotLevel')
+    print("\n"*20)
+    print(level)
+
+    db.session.add(crud.create_a_slot(char_id, level))
+    db.session.commit()
+
     return redirect(f'/play/{char_id}')
 
 
@@ -343,6 +367,11 @@ def handle_use_slot(char_id):
 
 
 
+@app.route('/get-all-slots/<char_id>')
+def get_all_slots(char_id):
+    """Returns list of all Slot objects"""
+
+    return jsonify(crud.get_all_slots_today(char_id))
 
 if __name__ == '__main__':
     connect_to_db(app)

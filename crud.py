@@ -126,6 +126,11 @@ def get_spells_known(char_id):
 
     return spell_slugs
 
+def get_spell_name_by_id(spell_id):
+    """Queries db for Spell obj matching id and returns name"""
+
+    return Spell.query.get(spell_id).spell_name
+
 
 
 #---------------------------------------managing days
@@ -173,15 +178,24 @@ def populate_slots(char_id):
     """
     blank_slots = []
 
-    #at each casting level, 1 through 9
-    for i in range(1,10):
+    if Character.query.get(char_id).player_class.class_slug != 'warlock':
+        #at each casting level, 1 through 9
+        for i in range(1,10):
 
-        #retrieve the total number of slots in a day from slot_rules
-        num_slots = get_slot_details(char_id)[f'max_slots_{i}']
+            #retrieve the total number of slots in a day from slot_rules
+            num_slots = get_slot_details(char_id)[f'max_slots_{i}']
 
-        #create that many blank slots at that level
-        for j in range(num_slots):
-            blank_slots.append(create_a_slot(char_id=char_id, level=i)) #automatically assigns day = current day
+            #create that many blank slots at that level
+            for j in range(num_slots):
+                blank_slots.append(create_a_slot(char_id=char_id, level=i)) #automatically assigns day = current day
+    else:
+        #at max casting level, create curr number of slots
+        max_level = get_slot_details(char_id)['max_level']
+        total_slots = get_slot_details(char_id)['slots']
+
+        for i in range(total_slots):
+            blank_slots.append(create_a_slot(char_id=char_id, level=max_level))
+
 
     return blank_slots
 
@@ -250,9 +264,18 @@ def get_slots_used_today_by_char(char_id):
 def get_all_slots_today(char_id):
     """Queries db and returns list of all slot objs for a character's current day"""
 
+    # #retrieves char's current day
     curr_day = get_current_day(char_id)
 
-    return Slot.query.filter(Slot.day_id == curr_day).all()
+    #list of dictionary objects from all slot objects matching current day
+    all_slots_today = [slot.to_dict() for slot in Slot.query.filter(Slot.day_id == curr_day, Slot.slot_level > 0)]
+
+    #on each dictionary, if there is a spell, add key spell_name
+    for slot in all_slots_today:
+        if slot['spell_type_id']:
+            slot['spell_name'] = Spell.query.get(slot['spell_type_id']).spell_name
+
+    return all_slots_today
 
 
 if __name__ == '__main__':

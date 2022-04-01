@@ -128,6 +128,17 @@ class Slot(db.Model):
     day = db.relationship('Day', backref='slots')
     character = db.relationship('Character', backref='slots')
 
+    def to_dict(self):
+
+        return {
+            'slot_id': self.slot_id,
+            'slot_reference': self.slot_reference,
+            'spell_type_id': self.spell_type_id,
+            'day_id': self.day_id,
+            'character_id': self.character_id,
+            'slot_level': self.slot_level
+        }
+
     def __repr__(self):
         return f'<Slot obj id={self.slot_id}>'
 

@@ -15,7 +15,12 @@ spells_1_data = requests.get("https://api.open5e.com/spells/").json()
 spells_1_info = spells_1_data["results"]
 
 for item in spells_1_info:
-    new_spell = crud.create_spell(item["slug"], item["name"], item["level_int"])
+    new_spell = crud.create_spell(item["slug"],
+                                  item["name"],
+                                  item["level_int"],
+                                  item["dnd_class"].lower(),
+                                  item["ritual"],
+                                  item["concentration"])
     spell_objs.append(new_spell)
 
 
@@ -26,7 +31,12 @@ for num in range(2,8):
     spells_info_dynamic = spells_data_dynamic["results"]
     
     for item in spells_info_dynamic:
-        new_spell = crud.create_spell(item["slug"], item["name"], item["level_int"])
+        new_spell = crud.create_spell(item["slug"],
+                                    item["name"],
+                                    item["level_int"],
+                                    item["dnd_class"].lower(),
+                                    item["ritual"],
+                                    item["concentration"])
         spell_objs.append(new_spell)
 
 def seed_spells():

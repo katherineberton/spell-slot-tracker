@@ -212,8 +212,11 @@ const slotRecoverButtons = document.querySelectorAll('.slot-recover')
 
 for (const button of slotRecoverButtons) {
   button.addEventListener('click', (evt) => {
-    id = evt.target.getAttribute('id')
-    level = id.charAt(id.length - 1)
+    const id = evt.target.getAttribute('id'); // "add-slot-{level}"
+
+    //split the above id into components, retrieve last element
+    const idSplit = id.split('-');
+    const level = idSplit[idSplit.length - 1]
 
     fetch(`/handle-add-slot/${charId}`, {
       method: 'POST',

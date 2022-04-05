@@ -13,22 +13,29 @@
     <input type="hidden" id="char-id" value="{{ char.character_id }}">
 
     <section id="menu">
-        <button id="long-rest"><a href='/handle-long-rest/{{ char.character_id }}'>Long Rest</a></button>
+
+        <form action="/handle-long-rest/{{ char.character_id }}">
+          <button class="btn btn-secondary" type="submit" id="long-rest-button">Long Rest</button>
+        </form>
+
 
         {% if char_class == 'warlock' %}
-            <button id="short-rest"><a href='/handle-short-rest/{{ char.character_id }}'>Short Rest</a></button>
+          <form action="/handle-short-rest/{{ char.character_id }}">
+            <button class="btn btn-secondary" type="submit" id="short-rest-button">Short Rest</button>
+          </form>
+
         {% endif %}
     </section>
 
 
     <section id="spells-known">
-        {{ char.character_name.upper() }}'S CANTRIPS
+        <h5>{{ char.character_name.upper() }}'S CANTRIPS</h5>
         <ul></ul>
     </section>
 
 
     <section id="board">
-        SLOTS
+        <h5>SLOTS</h5>
         <container id="slot-buttons-container">
           {% if char_class != 'warlock' %}
             {% for level in slot_details.keys() %}

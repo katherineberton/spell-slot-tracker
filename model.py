@@ -52,7 +52,6 @@ class Character(db.Model):
 
     #slots = a list of Slot objects used by this character
     #days = a list of Day objects this character has created
-    #spells_known = a list of SpellKnown objects this character knows
 
     def __repr__(self):
         return f'<Character obj id={self.character_id} name={self.character_name}>'
@@ -71,6 +70,9 @@ class Spell(db.Model):
                            nullable=False)
     spell_name = db.Column(db.String(100))
     spell_level = db.Column(db.Integer)
+    spell_classes = db.Column(db.String(500))
+    ritual =  db.Column(db.String(10))
+    concentration = db.Column(db.String(10))
 
     def __repr__(self):
         return f'<Spell obj id={self.spell_type_id} slug={self.spell_slug}>' 

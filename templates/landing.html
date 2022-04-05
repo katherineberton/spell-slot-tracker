@@ -11,60 +11,116 @@
     <div class="row" id="characters-div">
     {% if char_list %}
         {% for char in char_list %}
-            <div class="character-summary col bg-light" id="{{ char.character_id }}">
+            <div class="character-summary col-4 bg-light" id="{{ char.character_id }}">
                 <div class="row">
-                {{ char.character_name }} | Class: {{ char.player_class.class_name }} | Level: {{ char.character_level }}
+                <h3>{{ char.character_name }} | Class: {{ char.player_class.class_name }} | Level: {{ char.character_level }}</h3>
                 </div>
 
                 <div class="row">
-                    <p>Cantrips known:</p>
-                
-                    {% for spell in spell_dict[char.character_id] %}
-                        <div class="col">
-                            {{ spell.spell_name }}
-                            <form action="/delete-spell-known/{{ char.character_id }}">
-                                <button name="spell_to_delete" type="submit" value="{{ spell.spell_slug }}">
-                                    Delete
-                                </button>
-                            </form>
-                        </div>  
-                    {% endfor %}
+                    {% if char.player_class.class_slug not in ['ranger', 'paladin'] %}
+                        <p><h5>Cantrips known:</h5></p>
+                        {% if spell_dict[char.character_id] %}
+                            {% for spell in spell_dict[char.character_id] %}
+                                <div class="col">
+                                    {{ spell.spell_name }}
+                                    <form action="/delete-spell-known/{{ char.character_id }}">
+                                        <button class="btn btn-outline-secondary btn-sm" name="spell_to_delete" type="submit" value="{{ spell.spell_slug }}">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>  
+                            {% endfor %}
+                        {% else %}
+                        <button class="btn btn-outline-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addSpellKnown"
+                        id="add-cantrip-{{ char.character_id}}">
+                            Add some cantrips!
+                        </button>
+                        {% endif %}
+                    {% endif %}
+
                 </ul>
                 </div>
 
                 <div class="row" id="actions-bar">
-                    <p>Actions:</br>
-                        <div class="col">
-                            <form action="/level-up/{{char.character_id}}">
-                                <button class="btn btn-primary" type="submit">
-                                    Level up
+                    <p><h5>Actions:</h5></br></p>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-outline-primary" href="/level-up/{{ char.character_id }}" role="button">Level up</a>
+                            <a class="btn btn-outline-primary" href="/update-character/{{ char.character_id }}" role="button">Update</a>
+                            {% if char.player_class.class_slug not in ['ranger', 'paladin'] %}
+                                <button class="btn btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#addSpellKnown"
+                                                    id="add-cantrip-{{ char.character_id}}">
+                                    Add a cantrip
                                 </button>
-                            </form>
+                            {% endif %}
+                            <a class="btn btn-success" href="/play/{{char.character_id}}" role="button">PLAY</a>
                         </div>
-                        <div class="col">
-                            <form action="/update-character/{{char.character_id}}">
-                                <button class="btn btn-primary" type="submit">
-                                    Update
-                                </button>
-                            </form>
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-primary"
-                                                 data-bs-toggle="modal"
-                                                 data-bs-target="#addSpellKnown"
-                                                 id="add-cantrip-{{ char.character_id}}">
-                                Add a cantrip
-                            </button>
-                        </div>
-                        <div class="col"><form action="/play/{{char.character_id}}"><button class="btn btn-primary" type="submit">PLAY</button></form></div>
+
                     </p>
                 </div>
 
             </div>
         {% endfor %}
     </div>
+    <p>
+      <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#createCharacterForm">
+        Add another character
+      </button>
+    </p>
+    <div class="collapse" id="createCharacterForm">
+        <div class="card card-body">
+            <form action="/new-char-registration" method="POST">
+                <p>What's your character's name? <input type="text" name="char-name"></p>
+                <p>What's your character's class? <select name=char-class>
+                    <option value="bard">Bard</option>
+                    <option value="cleric">Cleric</option>
+                    <option value="druid">Druid</option>
+                    <option value="paladin">Paladin</option>
+                    <option value="ranger">Ranger</option>
+                    <option value="sorcerer">Sorcerer</option>
+                    <option value="warlock">Warlock</option>
+                    <option value="wizard">Wizard</option>
+                    <option value="multiclass">Multiclass</option>
+                </select></p>
+                <p>What's your character's caster level?</p>
+                {% for num in range(1,21) %}
+                    <input type="radio" name="char-level" value={{ num }}>{{ num }}
+                {% endfor %}
+                <p><button type="submit">Let's go!</button></p>
+            </form>
+        </div>
+    </div>
     {% else %}
-    You haven't created any characters yet! <a href="/create-a-character">Add one here.</a>
+    <p>You haven't created any characters yet! <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#createCharacterForm">
+        Add one.
+      </button>
+    </p>
+    <div class="collapse" id="createCharacterForm">
+        <div class="card card-body">
+            <form action="/new-char-registration" method="POST">
+                <p>What's your character's name? <input type="text" name="char-name"></p>
+                <p>What's your character's class? <select name=char-class>
+                    <option value="bard">Bard</option>
+                    <option value="cleric">Cleric</option>
+                    <option value="druid">Druid</option>
+                    <option value="paladin">Paladin</option>
+                    <option value="ranger">Ranger</option>
+                    <option value="sorcerer">Sorcerer</option>
+                    <option value="warlock">Warlock</option>
+                    <option value="wizard">Wizard</option>
+                    <option value="multiclass">Multiclass</option>
+                </select></p>
+                <p>What's your character's caster level?</p>
+                {% for num in range(1,21) %}
+                    <input type="radio" name="char-level" value={{ num }}>{{ num }}
+                {% endfor %}
+                <p><button type="submit">Let's go!</button></p>
+            </form>
+        </div>
+    </div>
 
 </div>
 {% endif %}

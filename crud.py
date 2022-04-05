@@ -88,10 +88,15 @@ def get_class_id_by_slug(slug):
 
 #----------------------------------------managing spells
 
-def create_spell(slug, name, level):
+def create_spell(slug, name, level, classes, ritual, concentration):
     """Create and return a Spell object - initial data pop"""
 
-    new_spell = Spell(spell_slug=slug, spell_name=name, spell_level=level)
+    new_spell = Spell(spell_slug=slug,
+                      spell_name=name,
+                      spell_level=level,
+                      spell_classes=classes,
+                      ritual=ritual,
+                      concentration=concentration)
     return new_spell
 
 def get_all_spells():
@@ -135,6 +140,17 @@ def get_all_cantrips():
     """Queries db for Spell objs where level = 1"""
 
     return Spell.query.filter(Spell.spell_level == 0)
+
+def get_spells_by_character_class(char_id):
+    """Queries db for Spell objs available for given character's class"""
+
+    player_class_slug = Character.query.get(char_id).player_class.class_slug
+
+    return Spell.query.filter(Spell.spell_classes.contains(player_class_slug)).all()
+
+def get_spells_by_class(player_class):
+
+    return Spell.query.filter(Spell.spell_classes.contains(player_class)).all()
 
 
 #---------------------------------------managing days

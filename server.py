@@ -240,8 +240,22 @@ def handle_add_spell(char_id):
 
     return redirect('/landing')
 
+@app.route('/browse-all-spells')
+def show_all_spells():
+    """Renders template to show all spells"""
+
+    spell_options = crud.get_all_spells()
+
+    return render_template('browse_all_spells.html', spells=spell_options)
 
 
+@app.route('/browse-<player_class>-spells')
+def browse_spells(player_class):
+    """Renders template to browse class specific spells"""
+
+    spell_options = crud.get_spells_by_class(player_class)
+
+    return render_template(f'browse_{player_class}_spells.html', spells = spell_options)
 
 
 #------------------------------------------------------------------tracker
@@ -359,7 +373,10 @@ def handle_use_slot(char_id):
 
         #retrieve id from spell slug and use slot with that spell
         spell_cast_id = crud.get_spell_id_by_slug(spell_cast)
-        crud.use_slot(char_id=char_id, level=spell_level, spell_id=spell_cast_id, user_note=user_note)
+        crud.use_slot(char_id=char_id,
+                      level=spell_level,
+                      spell_id=spell_cast_id,
+                      user_note=user_note)
 
     db.session.commit()
 

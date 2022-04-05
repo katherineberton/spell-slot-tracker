@@ -12,32 +12,13 @@
 
 <ul class="nav nav-tabs" id="nav-tabs">
     <li class="nav-item">
-      <a class="nav-link" href="/browse-all-spells">All spells</a>
+      <a class="nav-link" id="all-tab" href="/browse-all-spells">All spells</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/browse-bard-spells">Bard spells</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/browse-cleric-spells">Cleric spells</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/browse-druid-spells">Druid spells</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/browse-paladin-spells">Paladin spells</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="/browse-ranger-spells">Ranger spells</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/browse-sorcerer-spells">Sorcerer spells</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/browse-warlock-spells">Warlock spells</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/browse-wizard-spells">Wizard spells</a>
-    </li>
+    {% for class in ['bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock', 'wizard'] %}
+        <li class="nav-item">
+            <a class="nav-link" href="/browse-{{ class }}-spells" id="{{ class }}-tab">{{ class.title() }} spells</a>
+        </li>
+    {% endfor %}
 </ul>
 
 
@@ -45,7 +26,6 @@
 <div container>
 
   <div class="card-group d-flex flex-wrap" id="all-spells">
-    <h6>Ranger spells</h6>
     <ul>
       {% for spell in spells %}
       <div class="card border-info" style="width: 18rem;">

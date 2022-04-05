@@ -246,7 +246,7 @@ def show_all_spells():
 
     spell_options = crud.get_all_spells()
 
-    return render_template('browse_all_spells.html', spells=spell_options)
+    return render_template('browse_spells.html', spells=spell_options)
 
 
 @app.route('/browse-<player_class>-spells')
@@ -255,7 +255,7 @@ def browse_spells(player_class):
 
     spell_options = crud.get_spells_by_class(player_class)
 
-    return render_template(f'browse_{player_class}_spells.html', spells = spell_options)
+    return render_template(f'browse_spells.html', spells = spell_options)
 
 
 #------------------------------------------------------------------tracker

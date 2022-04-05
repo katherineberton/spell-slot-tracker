@@ -298,6 +298,15 @@ def get_all_slots_today(char_id):
     return all_slots_today
 
 
+#------------------------------------------------analytics
+
+def get_favorite_spell(char_id):
+    slots = Slot.query.filter(Slot.character_id == char_id, Slot.spell_type_id != None).group_by('spell_type_id').all()
+    
+    
+    return
+
+
 if __name__ == '__main__':
     from server import app
     connect_to_db(app)

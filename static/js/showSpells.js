@@ -15,6 +15,7 @@ for (const btn of spellCardBtns) {
         //retrieve spell slug from button's id
         const id = btn.getAttribute('id');
         const slug = id.slice(4);
+        console.log(slug)
 
         //fetch request on spell slug from api
         fetch(`https://api.open5e.com/spells/${slug}`)

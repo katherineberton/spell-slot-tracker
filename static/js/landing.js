@@ -14,6 +14,7 @@ cantripModal.addEventListener('show.bs.modal', (evt) => {
     //split by dash, retrieve last element in the list
     const idComponents = id.split('-');
     const characterId = idComponents[idComponents.length - 1]
+    console.log(characterId);
 
     //sets action attribute on form in modal to the appropriate flask route
     document.querySelector("#cantrip-form").setAttribute(

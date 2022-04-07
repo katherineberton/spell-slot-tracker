@@ -10,11 +10,10 @@
 
 {% block body %}
 
+<div class="react-testing" id="react-testing">React Testing</div>
+
 <ul class="nav nav-tabs" id="nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link" id="all-tab" href="/browse-all-spells">All spells</a>
-    </li>
-    {% for class in ['bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock', 'wizard'] %}
+    {% for class in ['all', 'bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock', 'wizard'] %}
         <li class="nav-item">
             <a class="nav-link" href="/browse-{{ class }}-spells" id="{{ class }}-tab">{{ class.title() }} spells</a>
         </li>
@@ -81,8 +80,9 @@
   </div>
 </div>
 
+<script src="/static/js/showSpells.jsx" type="text/jsx"></script>
+<script defer src="/static/js/showSpells.js"></script>
 
-<script src="/static/js/showSpells.js"></script>
 {% endblock %}
 
 {% block after_body %}{% endblock %}

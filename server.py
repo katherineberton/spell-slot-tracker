@@ -118,6 +118,13 @@ def show_landing():
 
     return render_template('landing.html', char_list=characters, spell_dict=all_spells_known, spell_options=cantrip_options)
 
+@app.route('/landing-2')
+def show_landing_2():
+    """Updating landing page with react"""
+
+    characters = [character.to_dict() for character in crud.get_characters_by_user_id(session['user_id'])]
+
+    return jsonify(characters)
 
 
 @app.route(f'/create-a-character')
@@ -257,6 +264,15 @@ def browse_spells(player_class):
 
     return render_template(f'browse_spells.html', spells = spell_options)
 
+@app.route('/browse-<player_class>-spells-2')
+def browse_spells_2(player_class):
+    """Returns spells by class if a class is specified"""
+
+    if player_class == 'all':
+        return jsonify([spell.to_dict() for spell in crud.get_all_spells()])
+    else:
+        return jsonify([spell.to_dict() for spell in crud.get_spells_by_class(player_class)])
+
 
 #------------------------------------------------------------------tracker
 
@@ -337,6 +353,15 @@ def list_spells_known(char_id):
     """Returns list of spells known by a character"""
 
     return jsonify(crud.get_spells_known(char_id))
+
+
+@app.route('/list-spells-known-2/<char_id>')
+def list_spells_known_2(char_id):
+    """Returns list of spells known by a character"""
+
+    cantrips = [spell.to_dict() for spell in crud.get_spell_objs_known(char_id)]
+
+    return jsonify(cantrips)
 
 
 

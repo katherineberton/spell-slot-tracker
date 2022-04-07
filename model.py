@@ -47,11 +47,22 @@ class Character(db.Model):
 
     user = db.relationship('User', backref='characters')
     player_class = db.relationship('PlayerClass', backref='characters')
-
     spells = db.relationship("Spell", secondary="characters_spells", backref="characters")
 
     #slots = a list of Slot objects used by this character
     #days = a list of Day objects this character has created
+
+    def to_dict(self):
+        """Converts object to dictionary"""
+        return {
+            'character_id': self.character_id,
+            'user_id': self.user_id,
+            'class_id': self.class_id,
+            'player_class': self.player_class.class_name,
+            'character_level': self.character_level,
+            'character_name': self.character_name,
+            'created_date': self.created_date
+        }
 
     def __repr__(self):
         return f'<Character obj id={self.character_id} name={self.character_name}>'
@@ -73,6 +84,18 @@ class Spell(db.Model):
     spell_classes = db.Column(db.String(500))
     ritual =  db.Column(db.String(10))
     concentration = db.Column(db.String(10))
+
+    def to_dict(self):
+        """Converts object to dictionary"""
+        return {
+            'spell_type_id': self.spell_type_id,
+            'spell_slug': self.spell_slug,
+            'spell_name': self.spell_name,
+            'spell_level': self.spell_level,
+            'spell_classes': self.spell_classes,
+            'ritual': self.ritual,
+            'concentration': self.concentration
+        }        
 
     def __repr__(self):
         return f'<Spell obj id={self.spell_type_id} slug={self.spell_slug}>' 

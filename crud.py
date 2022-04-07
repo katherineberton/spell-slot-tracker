@@ -131,6 +131,13 @@ def get_spells_known(char_id):
 
     return spell_slugs
 
+def get_spell_objs_known(char_id):
+    """Queries db for Spell objs associated with Character matching char_id
+    
+    Returns a list of each spell's slug"""
+
+    return Character.query.get(char_id).spells
+
 def get_spell_name_by_id(spell_id):
     """Queries db for Spell obj matching id and returns name"""
 

@@ -273,7 +273,13 @@ def browse_spells_2(player_class):
     else:
         return jsonify([spell.to_dict() for spell in crud.get_spells_by_class(player_class)])
 
+@app.route('/browse-spells-react')
+def show_spells_react():
+    """Renders template to show all spells"""
 
+    spell_options = crud.get_all_spells()
+
+    return render_template('browse_spells_react.html')
 #------------------------------------------------------------------tracker
 
 

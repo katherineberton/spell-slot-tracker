@@ -122,15 +122,6 @@ def delete_spell_known(char_id, spell_slug):
 
     char.spells.remove(spell)
 
-def get_spells_known(char_id):
-    """Queries db for Spell objs associated with Character matching char_id
-    
-    Returns a list of each spell's slug"""
-
-    spell_slugs = [spell.spell_slug for spell in Character.query.get(char_id).spells]
-
-    return spell_slugs
-
 def get_spell_objs_known(char_id):
     """Queries db for Spell objs associated with Character matching char_id
     
@@ -138,22 +129,10 @@ def get_spell_objs_known(char_id):
 
     return Character.query.get(char_id).spells
 
-def get_spell_name_by_id(spell_id):
-    """Queries db for Spell obj matching id and returns name"""
-
-    return Spell.query.get(spell_id).spell_name
-
 def get_all_cantrips():
     """Queries db for Spell objs where level = 1"""
 
     return Spell.query.filter(Spell.spell_level == 0)
-
-def get_spells_by_character_class(char_id):
-    """Queries db for Spell objs available for given character's class"""
-
-    player_class_slug = Character.query.get(char_id).player_class.class_slug
-
-    return Spell.query.filter(Spell.spell_classes.contains(player_class_slug)).all()
 
 def get_spells_by_class(player_class):
 
@@ -225,11 +204,6 @@ def populate_slots(char_id):
 
 
     return blank_slots
-
-def get_highest_slot(char_id):
-    """Gets highest level slot of available slots"""
-    #make this later
-    pass
 
 def get_slot(char_id, level):
     """Queries db for first empty Slot object with matching character id and day id at the specified level"""

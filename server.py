@@ -105,26 +105,20 @@ def show_landing():
     """Shows landing page listing user's characters"""
 
     characters = crud.get_characters_by_user_id(session['user_id'])
-
-    all_spells_known = {}
-
-    for character in characters:
-        #dictionary entry with key character id and value list of spells
-
-        spells_known = crud.get_character_by_id(character.character_id).spells
-        all_spells_known[character.character_id] = spells_known
-
     cantrip_options = crud.get_all_cantrips()
 
-    return render_template('landing.html', char_list=characters, spell_dict=all_spells_known, spell_options=cantrip_options)
+    return render_template('landing.html', char_list=characters, cantrip_options=cantrip_options)
 
-@app.route('/landing-2')
-def show_landing_2():
-    """Updating landing page with react"""
+
+
+@app.route('/list-characters')
+def list_characters():
+    """Info for React character card components"""
 
     characters = [character.to_dict() for character in crud.get_characters_by_user_id(session['user_id'])]
 
     return jsonify(characters)
+
 
 
 @app.route(f'/create-a-character')
@@ -227,6 +221,7 @@ def delete_spell_known(char_id):
     return redirect('/landing')
 
 
+
 @app.route('/handle-add-spell/<char_id>', methods=['POST'])
 def handle_add_spell(char_id):
     """Adds wanted spell to character's spell list"""
@@ -247,39 +242,15 @@ def handle_add_spell(char_id):
 
     return redirect('/landing')
 
-@app.route('/browse-all-spells')
-def show_all_spells():
-    """Renders template to show all spells"""
-
-    spell_options = crud.get_all_spells()
-
-    return render_template('browse_spells.html', spells=spell_options)
 
 
 @app.route('/browse-<player_class>-spells')
 def browse_spells(player_class):
     """Renders template to browse class specific spells"""
 
-    spell_options = crud.get_spells_by_class(player_class)
+    return render_template(f'browse_spells.html')
 
-    return render_template(f'browse_spells.html', spells = spell_options)
-
-@app.route('/browse-<player_class>-spells-2')
-def browse_spells_2(player_class):
-    """Returns spells by class if a class is specified"""
-
-    if player_class == 'all':
-        return jsonify([spell.to_dict() for spell in crud.get_all_spells()])
-    else:
-        return jsonify([spell.to_dict() for spell in crud.get_spells_by_class(player_class)])
-
-@app.route('/browse-spells-react')
-def show_spells_react():
-    """Renders template to show all spells"""
-
-    spell_options = crud.get_all_spells()
-
-    return render_template('browse_spells_react.html')
+        
 #------------------------------------------------------------------tracker
 
 
@@ -317,6 +288,7 @@ def handle_long_rest(char_id):
     return redirect(f'/play/{char_id}')
 
 
+
 @app.route('/handle-short-rest/<char_id>')
 def handle_short_rest(char_id):
     """WARLOCKS ONLY
@@ -326,6 +298,8 @@ def handle_short_rest(char_id):
     db.session.commit()
 
     return redirect(f'/play/{char_id}')
+
+
 
 @app.route('/handle-add-slot/<char_id>', methods=['POST'])
 def handle_arcane_recovery(char_id):
@@ -359,6 +333,7 @@ def list_spells_known(char_id):
     """Returns list of spells known by a character"""
 
     return jsonify(crud.get_spells_known(char_id))
+
 
 
 @app.route('/list-spells-known-2/<char_id>')
@@ -420,6 +395,19 @@ def get_all_slots(char_id):
     """Returns list of all Slot objects"""
 
     return jsonify(crud.get_all_slots_today(char_id))
+
+
+
+@app.route('/get-<player_class>-spells')
+def display_spells_browsing(player_class):
+    """Returns spells by class if a class is specified"""
+
+    if player_class == 'all':
+        return jsonify([spell.to_dict() for spell in crud.get_all_spells()])
+    else:
+        return jsonify([spell.to_dict() for spell in crud.get_spells_by_class(player_class)])
+
+        
 
 if __name__ == '__main__':
     connect_to_db(app)

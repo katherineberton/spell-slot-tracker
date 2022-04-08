@@ -110,7 +110,7 @@ function CharacterCardContainer(props) {
 
     //this fct occurs on every render including the first one 
     React.useEffect( () => {
-        fetch('/landing-2')
+        fetch('/list-characters')
             .then(res => res.json())
             .then(characters => {
                 setCharacters(characters)

@@ -127,7 +127,7 @@ function SpellCardContainer(props) {
 
     //set spells state to list of spells
     React.useEffect( () => {
-      fetch(`browse-${currentBrowsingClass}-spells-2`)
+      fetch(`get-${currentBrowsingClass}-spells`)
         .then(res => res.json())
         .then(spellData => setSpells(spellData))
     }, []);

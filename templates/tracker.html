@@ -62,7 +62,7 @@
     </section>
 
     {% if slots_used_today|length > 0 %}
-      Slots used today:
+      Slot activity from earlier today:
       <ul>
         {% for slot in slots_used_today %}
           <li>Level {{ slot.level }} | {% if slot.spell_name %}{{ slot.spell_name }}{% else %}{{ slot.note }}{% endif %}</li>

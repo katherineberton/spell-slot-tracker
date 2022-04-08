@@ -57,7 +57,7 @@ function castCantrip(spellSlug) {
 const spellsKnown = document.querySelector('#spells-known ul')
 
 //fetch all slugs associated with spells known by character id
-fetch(`/list-spells-known/${charId}`)
+fetch(`/list-spells-known-2/${charId}`)
   .then(res => res.json())
   .then(spells => {
 
@@ -65,7 +65,7 @@ fetch(`/list-spells-known/${charId}`)
     for (const spell of spells) {
 
       //call spell details fetch function
-      spell_details_fetch(spell)
+      spell_details_fetch(spell.spell_slug)
 
         //then use that info to populate the button
         .then(info => {
@@ -74,14 +74,14 @@ fetch(`/list-spells-known/${charId}`)
           spellsKnown.insertAdjacentHTML(
             'beforeend',
             `<li><button class="cast-cantrip-button"
-                         id="${spell}"
-                         value="${spell}">
+                         id="${spell.spell_slug}"
+                         value="${spell.spell_slug}">
                  ${info.name}
                  </button></li>`
           )
           
           //add the "castCantrip" event listener to it
-          document.querySelector(`#${spell}`).addEventListener(
+          document.querySelector(`#${spell.spell_slug}`).addEventListener(
             'click',
             () => castCantrip(spell)
           );

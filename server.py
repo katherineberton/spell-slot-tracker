@@ -173,7 +173,6 @@ def handle_character_update(char_id):
     """Updates character in db"""
     
     char = crud.get_character_by_id(char_id)
-    print(char)
 
     multi = request.form.get('multiclassing')
     caster_level = request.form.get('char-level')
@@ -269,7 +268,6 @@ def show_play_screen(char_id):
                             char=char,
                             spell_options=spell_options,
                             slot_details=slot_details,
-                            spells_known=spells_known,
                             slots_used_today=slots_used_today,
                             char_class=char_class)
 
@@ -325,14 +323,6 @@ def get_current_slot_rules(char_id):
     """Gets slot details by character's class and level"""
 
     return jsonify(crud.get_slot_details(char_id))
-
-
-
-@app.route('/list-spells-known/<char_id>')
-def list_spells_known(char_id):
-    """Returns list of spells known by a character"""
-
-    return jsonify(crud.get_spells_known(char_id))
 
 
 

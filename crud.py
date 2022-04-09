@@ -1,8 +1,8 @@
 """CRUD operations"""
 
+from ast import Index
 from model import User, Character, Spell, Slot, Day, PlayerClass, connect_to_db, db
 from datetime import datetime
-
 from slot_rules import slot_rules
 
 
@@ -43,7 +43,7 @@ def get_character_by_id(char_id):
 def get_characters_by_user_id(id):
     """Returns list of characters belonging to the user by id"""
 
-    return get_user_by_id(id).characters
+    return sorted(get_user_by_id(id).characters, key=lambda x: x.character_name)
 
 def level_character_up_by_id(char_id):
     """Takes in a character id and increments the level by one"""
@@ -103,6 +103,11 @@ def get_all_spells():
     """Queries db for all 321 spells"""
 
     return Spell.query.all()
+
+def get_all_spells_no_cantrips():
+    """Queries db for all spells where level > 0"""
+
+    return Spell.query.filter(Spell.spell_level > 0).all()
 
 def get_spell_by_slug(slug):
     """Queries db for Spell obj with matching slug"""
@@ -281,11 +286,156 @@ def get_all_slots_today(char_id):
 
 #------------------------------------------------analytics
 
-def get_favorite_spell(char_id):
-    slots = Slot.query.filter(Slot.character_id == char_id, Slot.spell_type_id != None).group_by('spell_type_id').all()
+def get_max_slot(char_id):
+
+    rules = get_slot_details(char_id)
+
+    if get_character_by_id(char_id).player_class.class_slug != 'warlock':
+
+        lst = []
+        for key, value in rules.items():
+            if value > 0 and key[-1] != 'n':
+                lst.append(key[-1])
+
+        return int(max(lst))
+
+    else:
+        return rules['max_level']
+
+
+
+def get_char_favorite_spell(char_id):
     
+    query = """SELECT spell_name, count(slot_id)
+                    FROM slots
+                    JOIN spells ON slots.spell_type_id = spells.spell_type_id
+                    WHERE character_id = :character_id
+                        AND slots.spell_type_id IS NOT NULL
+                    GROUP BY slots.spell_type_id, spell_name
+                    ORDER BY count(slot_id) DESC
+                    LIMIT 1"""
+
+    cursor = db.session.execute(query, {'character_id': char_id})
     
-    return
+    try:
+        return cursor.fetchall()[0]
+    except IndexError:
+        return []
+
+def count_num_days(char_id):
+
+    query = """SELECT count(day_id)
+                FROM days
+                WHERE character_id = :character_id
+                GROUP BY day_id"""
+
+    cursor=db.session.execute(query, {'character_id': char_id})
+
+    return len(cursor.fetchall())
+
+def get_char_favorite_spell_by_level(char_id, target_level):
+
+    query = """SELECT spell_name, count(slot_id)
+                FROM slots
+                JOIN spells ON spells.spell_type_id = slots.spell_type_id
+                WHERE character_id = :character_id
+                    AND slots.spell_type_id IS NOT NULL
+                    AND slot_level = :level 
+                GROUP BY spell_name
+                ORDER BY count(slot_id) DESC
+                LIMIT 1"""
+
+    cursor=db.session.execute(query, {'character_id': char_id, 'level': target_level})
+
+    try:
+        return cursor.fetchall()[0]
+    except IndexError:
+        return []
+
+def get_char_fav_spell_all_levels(char_id):
+
+    faves = {}
+
+    for i in range(1, get_max_slot(char_id) + 1):
+        faves[i] = list(get_char_favorite_spell_by_level(char_id, i))
+
+    return faves
+
+def count_char_spells_cast_all_levels(char_id):
+
+    query = """SELECT slot_level, count(slot_id)
+                FROM slots
+                WHERE character_id = :character_id
+                    AND spell_type_id IS NOT NULL
+                GROUP BY slot_level
+                ORDER BY slot_level"""
+
+    cursor=db.session.execute(query, {'character_id': char_id}).fetchall()
+
+    return [[row[0], row[1]] for row in cursor]
+
+def is_spell_upcast(slot_id):
+
+    query = """SELECT spell_level, slot_level
+                FROM slots
+                JOIN spells ON slots.spell_type_id = spells.spell_type_id
+                WHERE slot_id = :slot"""
+
+    cursor=db.session.execute(query, {'slot': slot_id}).fetchall()
+
+    return cursor[0][0] < cursor[0][1]
+
+def get_char_upcast_spells(char_id):
+
+    query = """SELECT slot_id, spell_name, spell_level, slot_level
+                FROM slots
+                JOIN spells ON spells.spell_type_id = slots.spell_type_id
+                WHERE character_id = :character_id
+                    AND slots.spell_type_id IS NOT NULL
+                    AND spell_level < slot_level"""
+    
+    cursor=db.session.execute(query, {'character_id': char_id})
+
+    print(cursor.fetchall())
+
+def get_char_favorite_upcast_spell(char_id):
+    
+    query = """SELECT spell_name, count(slot_id)
+                    FROM slots
+                    JOIN spells ON slots.spell_type_id = spells.spell_type_id
+                    WHERE character_id = :character_id
+                        AND slots.spell_type_id IS NOT NULL
+                        AND slots.slot_level > spells.spell_level
+                    GROUP BY slots.spell_type_id, spell_name
+                    ORDER BY count(slot_id) DESC
+                    LIMIT 1"""
+
+    cursor = db.session.execute(query, {'character_id': char_id})
+    
+    try:
+        return cursor.fetchall()[0]
+    except IndexError:
+        return []
+
+def get_user_favorite_spell(user_id):
+
+    query = """SELECT name, character_name, spell_name, count(slot_id)
+                FROM slots
+                JOIN characters ON characters.character_id = slots.character_id
+                JOIN users ON characters.user_id = users.user_id
+                JOIN spells ON spells.spell_type_id = slots.spell_type_id
+                WHERE users.user_id = :user
+                GROUP BY spells.spell_name, characters.character_name, users.name
+                ORDER BY count(slot_id) DESC
+                LIMIT 1"""
+
+    cursor=db.session.execute(query, {'user': user_id})
+
+    try:
+        return cursor.fetchall()[0]
+    except IndexError:
+        return []
+
 
 
 if __name__ == '__main__':

@@ -178,7 +178,7 @@ class Day(db.Model):
     day_id = db.Column(db.Integer,
                        autoincrement=True,
                        primary_key=True)
-    day_reference = db.Column(db.String(100)) #user input
+    day_reference = db.Column(db.String(100)) #did not end up using this
     first_session_date = db.Column(db.DateTime) #not sure if i'm going to keep this
     character_id = db.Column(db.Integer,
                         db.ForeignKey("characters.character_id"))
@@ -197,7 +197,7 @@ def connect_to_db(app, db_name="spell_slot_tracker_db"):
     """Connect to database."""
 
     app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{db_name}"
-    app.config["SQLALCHEMY_ECHO"] = True #try turning this off
+    app.config["SQLALCHEMY_ECHO"] = True #try turning this off for debugging
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.app = app

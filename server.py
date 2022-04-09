@@ -1,6 +1,6 @@
 from crypt import methods
 from os import name
-from flask import Flask, render_template, render_template_string, request, flash, session, redirect, jsonify
+from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from model import connect_to_db, db
@@ -114,7 +114,7 @@ def show_landing():
 @app.route('/list-characters')
 def list_characters():
     """Info for React character card components"""
-
+    
     characters = [character.to_dict() for character in crud.get_characters_by_user_id(session['user_id'])]
 
     return jsonify(characters)
@@ -249,6 +249,15 @@ def browse_spells(player_class):
 
     return render_template(f'browse_spells.html')
 
+
+
+@app.route('/facts-sheet')
+def show_facts_sheet():
+    """Renders template to show facts sheet"""
+
+    return render_template('facts_sheet.html')
+
+
         
 #------------------------------------------------------------------tracker
 
@@ -259,9 +268,9 @@ def show_play_screen(char_id):
 
     char = crud.get_character_by_id(char_id)
     char_class = char.player_class.class_slug
-    spell_options = crud.get_all_spells()
+    spell_options = crud.get_all_spells_no_cantrips()
     slot_details = crud.get_slot_details(char_id)
-    spells_known = crud.get_spells_known(char_id)
+    spells_known = [spell.spell_slug for spell in crud.get_spell_objs_known(char_id)]
     slots_used_today = crud.get_slots_used_today_by_char(char_id)
 
     return render_template('tracker.html',
@@ -305,8 +314,6 @@ def handle_arcane_recovery(char_id):
     Creates one slot on the current day"""
 
     level = request.json.get('slotLevel')
-    print("\n"*20)
-    print(level)
 
     db.session.add(crud.create_a_slot(char_id, level))
     db.session.commit()
@@ -397,7 +404,35 @@ def display_spells_browsing(player_class):
     else:
         return jsonify([spell.to_dict() for spell in crud.get_spells_by_class(player_class)])
 
+
+
+@app.route('/get-user-fav-spell')
+def get_user_fav_spell():
+    """Returns the user's most cast spell"""
+
+    return jsonify(list(crud.get_user_favorite_spell(session['user_id'])))
         
+
+
+
+@app.route('/list-characters-fact-sheet')
+def list_characters_fact_sheet():
+    """Info for fact sheet so as to do only one fetch request for each char card"""
+    
+    characters = [character.to_dict() for character in crud.get_characters_by_user_id(session['user_id'])]
+
+    for character in characters:
+        id = character['character_id']
+
+        character['num_days'] = crud.count_num_days(id)
+        character['fav_spell'] = list(crud.get_char_favorite_spell(id))
+        character['fav_upcast_spell'] = list(crud.get_char_favorite_upcast_spell(id))
+        character['fav_spell_each_level'] = crud.get_char_fav_spell_all_levels(id)
+        character['spell_level_count'] = crud.count_char_spells_cast_all_levels(id)
+    
+    return jsonify(characters)
+
+
 
 if __name__ == '__main__':
     connect_to_db(app)

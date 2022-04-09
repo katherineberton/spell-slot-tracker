@@ -13,7 +13,7 @@
 <ul class="nav nav-tabs" id="nav-tabs">
     {% for class in ['all', 'bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock', 'wizard'] %}
         <li class="nav-item">
-            <a class="nav-link" href="/browse-{{ class }}-spells" id="{{ class }}-tab">{{ class.title() }} spells</a>
+            <a class="nav-link spell-tab" href="/browse-{{ class }}-spells" id="{{ class }}-tab">{{ class.title() }} spells</a>
         </li>
     {% endfor %}
 </ul>
@@ -23,7 +23,7 @@
 </div>
 
 <script src="/static/js/showSpells.jsx" type="text/jsx"></script>
-
+<script src="/static/js/browseSpells.js"></script>
 {% endblock %}
 
 {% block after_body %}{% endblock %}

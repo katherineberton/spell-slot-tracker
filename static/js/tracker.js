@@ -1,20 +1,3 @@
-/*
-turn the following things into event handlers:
-tracker page - long rest button
-landing page - 
-  level up
-  update
-  add cantrip
-  get playing
-
-modal for add cantrip:
-
-use the same modal as on the trakcer page
-get the add button to show the modal
-
-
-*/
-
 const charId = document.querySelector('#char-id').getAttribute('value')
 
 //------------------------------------------functions
@@ -41,20 +24,14 @@ function castCantrip(spellSlug) {
 
   //trigger the flask route that adds a cantrip to the db
   fetch(`/cast-cantrip/${charId}?spell-slug=${spellSlug}`)
+  
 }
-
-//-----------------------------------------menu
-
-
-
-
-
 
 
 //------------------------------------------spells known
 
 //select spells known section
-const spellsKnown = document.querySelector('#spells-known ul')
+const spellsKnown = document.querySelector('#spells-known')
 
 //fetch all slugs associated with spells known by character id
 fetch(`/list-spells-known-2/${charId}`)
@@ -73,17 +50,17 @@ fetch(`/list-spells-known-2/${charId}`)
           //create the button
           spellsKnown.insertAdjacentHTML(
             'beforeend',
-            `<li><button class="cast-cantrip-button"
-                         id="${spell.spell_slug}"
-                         value="${spell.spell_slug}">
-                 ${info.name}
-                 </button></li>`
+              `<button
+              class="btn cast-cantrip-button btn-outline-primary"
+              id="${spell.spell_slug}">
+                ${info.name}
+              </button>`
           )
           
           //add the "castCantrip" event listener to it
           document.querySelector(`#${spell.spell_slug}`).addEventListener(
             'click',
-            () => castCantrip(spell)
+            () => castCantrip(spell.spell_slug)
           );
         })
     }

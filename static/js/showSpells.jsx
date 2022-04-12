@@ -151,10 +151,9 @@ function SpellCardContainer(props) {
   
     return (
       <React.Fragment>
-        <h3>{currentBrowsingClass.toUpperCase()} SPELLS</h3>
-        <div className="grid">{spellCards}</div>
+        {spellCards}
         <div>
-        <ReactBootstrap.Offcanvas show={show} onHide={handleClose}>
+        <ReactBootstrap.Offcanvas show={show} onHide={handleClose} scroll="true">
           <ReactBootstrap.Offcanvas.Header closeButton>
           </ReactBootstrap.Offcanvas.Header>
           <ReactBootstrap.Offcanvas.Body>

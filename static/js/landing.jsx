@@ -2,22 +2,15 @@ function CantripKnown(props) {
 
     return (
         <React.Fragment>
-            {props.spellName}
-            <form action={`/delete-spell-known/${props.charId}`}>
-                <button className="btn btn-outline-secondary btn-sm" name="spell_to_delete" type="submit" value={props.spellSlug}>
-                    Delete
-                </button>
-            </form>
+            <div className="cantrip-known">
+                {props.spellName}
+                <form action={`/delete-spell-known/${props.charId}`}>
+                    <button className="btn btn-outline-secondary btn-sm delete-cantrip-button" name="spell_to_delete" type="submit" value={props.spellSlug}>
+                        Delete
+                    </button>
+                </form>
+            </div>
         </React.Fragment>
-    );
-}
-
-
-function AddCharacterButton(props) {
-    return (
-        <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#createCharacterForm">
-            Add another character
-        </button>
     );
 }
 
@@ -69,7 +62,7 @@ function CharacterCard(props) {
         );
         //if cantrips known, display them
         if (cantrips.length > 0) {
-            cantripsSection = (<div className="col">{cantripComponents}</div>);
+            cantripsSection = (<div className="col cantrips-section">{cantripComponents}</div>);
         } else { 
             //otherwise, prompt to add one
             cantripsSection =
@@ -84,10 +77,10 @@ function CharacterCard(props) {
 
 
     return (
-        <div className="row">
             <div className="character-summary col-4 bg-light" id={`char-card-${props.charId}`}>
-                <div className="row"><h3>{props.name} | Class: {props.playerClass} | Level: {props.level}</h3></div>
+                <h3 className="character-head">{props.name} | Class: {props.playerClass} | Level: {props.level}</h3>
                 <div className="row" id={`cantrips-known-${props.charId}`}>
+                    <h5>Cantrips known:</h5>
                     {cantripsSection}
                 </div>
                 <div className="row" id="actions-bar">
@@ -100,7 +93,6 @@ function CharacterCard(props) {
                         </div>
                 </div>
             </div>
-        </div>
     );
 }
 

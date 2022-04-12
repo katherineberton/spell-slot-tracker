@@ -27,14 +27,12 @@
         {% endif %}
     </section>
 
-
-    <section id="spells-known">
-        <h5>{{ char.character_name.upper() }}'S CANTRIPS</h5>
-        <ul></ul>
-    </section>
+    <h5>{{ char.character_name.upper() }}'S CANTRIPS</h5>
+    <div class="btn-group" id="spells-known"></div>
 
 
     <section id="board">
+    </br>
         <h5>SLOTS</h5>
         <container id="slot-buttons-container">
           {% if char_class != 'warlock' %}

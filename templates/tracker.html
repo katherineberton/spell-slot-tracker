@@ -9,10 +9,11 @@
 {% block first_header %}{% endblock %}
 
 {% block body %}
+<div class="container" id="tracker-container">
     <!-- hidden input with char id so its value can be query selected-->
     <input type="hidden" id="char-id" value="{{ char.character_id }}">
-
-    <section id="menu">
+    <div id="menu">
+      <div id="rest-buttons">
 
         <form action="/handle-long-rest/{{ char.character_id }}">
           <button class="btn btn-secondary" type="submit" id="long-rest-button">Long Rest</button>
@@ -25,16 +26,34 @@
           </form>
 
         {% endif %}
-    </section>
+      </div>
 
-    <h5>{{ char.character_name.upper() }}'S CANTRIPS</h5>
-    <div class="btn-group" id="spells-known"></div>
+      <div id="cantrips-div">
+        <h5>{{ char.character_name.upper() }}'S CANTRIPS</h5>
+        <div class="btn-group" id="spells-known"></div>
+      </div>
+      
+      <div id="casting-history">      
+        {% if slots_used_today|length > 0 %}
+        <p>Slot activity from earlier today:</p>
+          <ul>
+            {% for slot in slots_used_today %}
+              <li>Level {{ slot.level }} | {% if slot.spell_name %}{{ slot.spell_name }}{% else %}{{ slot.note }}{% endif %}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
 
 
-    <section id="board">
-    </br>
+    </div>
+
+
+
+
+
+    <div id="board">
         <h5>SLOTS</h5>
-        <container id="slot-buttons-container">
+        <div class="container" id="slot-buttons-container">
           {% if char_class != 'warlock' %}
             {% for level in slot_details.keys() %}
               {% if slot_details[level] > 0 and level != 'cantrips_known' %}
@@ -56,17 +75,8 @@
               Level {{ slot_details['max_level']}} slots per rest: {{ slot_details['slots']}}
             </div>
           {% endif %}
-        </container>
-    </section>
-
-    {% if slots_used_today|length > 0 %}
-      Slot activity from earlier today:
-      <ul>
-        {% for slot in slots_used_today %}
-          <li>Level {{ slot.level }} | {% if slot.spell_name %}{{ slot.spell_name }}{% else %}{{ slot.note }}{% endif %}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+          </div>
+      </div>
     
 
 
@@ -102,7 +112,7 @@
         </div>
       </div>
     </div>
-
+</div>
 
     <script src="/static/js/tracker.js"></script>
 {% endblock %}

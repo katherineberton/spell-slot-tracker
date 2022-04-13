@@ -61,7 +61,7 @@ function OffcanvasContent(props) {
   }
 
   return (
-    <div class="offcanvas-body">
+    <div>
     <p id='level-school'><h5>{spellDetails.spellName}: Level {spellDetails.baseLevel}{ritualDisplay}{concentrationDisplay}</h5></p>
     <p id='casting-time'>Casting time: {spellDetails.castingTime}</p>
     <p id='range'>Range: {spellDetails.range}</p>
@@ -96,7 +96,7 @@ function SpellCard(props) {
               {props.spellName}{ritualDisplay}{concentrationDisplay}
             </h5>
             <h6 className="card-subtitle mb-2 text-muted">Base level: {props.spellLevel}</h6>
-            <button className="btn btn-info btn-sm spell-card-btn"
+            <button className="btn btn-sm see-details-btn"
                     type="button"
                     onClick={() => props.onClick(props.spellSlug)}
                     id={`btn-react-${props.spellSlug}`}>
@@ -153,7 +153,7 @@ function SpellCardContainer(props) {
       <React.Fragment>
         {spellCards}
         <div>
-        <ReactBootstrap.Offcanvas show={show} onHide={handleClose} scroll="true">
+        <ReactBootstrap.Offcanvas show={show} onHide={handleClose} scroll={true} backdrop={true}>
           <ReactBootstrap.Offcanvas.Header closeButton>
           </ReactBootstrap.Offcanvas.Header>
           <ReactBootstrap.Offcanvas.Body>

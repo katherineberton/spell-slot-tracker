@@ -1,10 +1,12 @@
-const userSection = document.querySelector("#user-facts");
+// const userSection = document.querySelector("#user-facts");
 
-fetch('/get-user-fav-spell')
-    .then(res => res.json())
-    .then(favSpell => {
-        userSection.innerHTML = `<p>Your favorite spell is ${favSpell[2]}. It was cast by ${favSpell[1]} ${favSpell[3]} times.</p>`
-    })
+// fetch('/get-user-fav-spell')
+//     .then(res => res.json())
+//     .then(favSpell => {
+//         userSection.innerHTML = `<p>Your favorite spell is ${favSpell[2]}. It was cast by ${favSpell[1]} ${favSpell[3]} times.</p>`
+//     })
+
+//add this fun fact back in when I think of more things you might want to know about on the user level
 
 
 
@@ -76,7 +78,7 @@ fetch('/list-characters-fact-sheet')
 
 
             characterSection.insertAdjacentHTML('beforeend',`
-            <div class="card" style="width: 36rem;">
+            <div class="card character-facts-sheet" style="width: 36rem;">
                 <div class="card-body" id="${character.character_id}-card">
                     <h5 class="card-title">${character.character_name}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">

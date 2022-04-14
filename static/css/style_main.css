@@ -1,0 +1,448 @@
+body {
+    background: url("https://images.unsplash.com/photo-1483086431886-3590a88317fe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3088&q=80") no-repeat center center;
+    background-size: cover;
+    filter: grayscale(.5);
+}
+
+.main-navbar {
+    background: url("https://www.toptal.com/designers/subtlepatterns/uploads/congruent_pentagon.png") repeat;
+    font-family: "Merriweather", serif;
+}
+
+h3, h4 {
+    text-align: center;
+    font-family: "Merriweather", serif;
+}
+
+h6 {
+    color:rgb(255, 255, 255);
+    font-weight: normal;
+}
+
+h5 {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    font-weight: normal;
+    font-family: "Merriweather", serif;
+}
+
+.btn-close {
+    background-color: rgb(211, 252, 213);
+}
+
+input[type=text], input[type=password] {
+    background-color: rgba(0, 0, 0, 0);
+    color:rgb(211, 252, 213);
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: rgba(0, 0, 0, 0);
+    color:rgb(211, 252, 213);
+}
+
+p.flash-msg {
+    background-color: rgba(0, 0, 0, 0);
+    text-transform: uppercase;
+    text-align: center;
+    font-size: larger;
+    font-weight: bolder;
+    color: rgb(255, 255, 255);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* register/login page */
+
+#homepage-container, #register-container {
+    background-color:rgba(123, 109, 141, .9);
+    box-shadow: 0px 0px 50px rgba(123, 109, 141, 1);
+    height: 100vh;
+    padding: 25px;
+    color: rgba(211, 252, 213, 1);
+}
+
+.register-button {
+    background-color: rgba(0, 0, 0, 0);
+    border-color:rgb(211, 252, 213);
+    color:rgb(211, 252, 213);
+    border-style: inset;
+    border-width: 1px;
+}
+
+#log-in-heading {
+    text-align: left;
+}
+
+#log-in-div {
+    margin-bottom: 25px;
+}
+/* browse spells - spell cards */
+
+.card {
+    width: 18em;
+    display: flex;
+    background: rgba(89, 63, 98, .85);
+    box-shadow: 0px 0px 25px rgba(123, 109, 141, 1);
+    color: rgb(211, 252, 213);
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.see-details-btn {
+    background-color:rgba(0, 0, 0, 0);
+    color: rgb(13, 202, 240);
+    border-color: rgb(13, 202, 240);
+}
+
+.see-details-btn:hover {
+    background-color:rgba(0, 0, 0, 0);
+    color:rgb(211, 252, 213);
+    box-shadow: 0px 0px 15px rgba(51, 153, 172, 1);
+}
+
+#spell-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18em, 4fr));
+    grid-auto-rows: 150px;
+    grid-gap: 1em;
+}
+
+.offcanvas {
+    position: sticky;
+    height: 100vh;
+}
+
+.nav-link.spell-tab {
+    border-color: rgba(255, 255, 255, .25);
+    color:rgba(255, 255, 255, .5);
+}
+
+
+.nav-link.spell-tab.active {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgb(13, 202, 240);
+    color: rgb(13, 202, 240);
+    font-weight: bolder;
+}
+
+.offcanvas {
+    background: url(https://images.unsplash.com/photo-1528458965990-428de4b1cb0d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1929&q=80) repeat;   
+}
+
+.offcanvas-body {
+    font-size: small;
+}
+
+.offcanvas-body p {
+    color:#493B2A;
+}
+
+#description, #hl-description {
+    font-size: medium;
+    font-family: "Merriweather", serif;
+}
+
+#level-school h5 {
+    color:#493B2A;
+    font-family: "Merriweather", serif;
+    font-weight: thin;
+}
+
+#casting-time, #range, #components-materials, #duration, #classes {
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: .25em;
+    margin-bottom: .25em;
+}
+
+
+/* landing - character cards */
+
+.add-character {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.add-character-button {
+    width: 500px;
+}
+
+.text-input, .dropdown-input {
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+}
+
+.text-input:focus {
+    box-shadow: 0px 0px 18px rgba(211, 252, 213, 1);
+}
+
+.character-summary {
+    width: 24em;
+    background: rgba(89, 63, 98, .90);
+    box-shadow: 0px 0px 25px rgba(123, 109, 141, 1);
+    color: rgb(211, 252, 213);
+    padding: 15px;
+    border-radius: 10px;
+    display: grid;
+}
+
+.character-summary h5 {
+    text-align: left;
+}
+
+.cantrip-known {
+    display: inline-block;
+}
+
+.cantrips-section {
+    justify-content: space-evenly;
+    display: flex;
+}
+
+.delete-cantrip-button{
+    display: table;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0);
+    border-color:rgb(132, 153, 177);
+    color:rgb(132, 153, 177);
+    border-style: solid;
+    border-width: 1px;
+}
+
+.action-button {
+    display: table;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0);
+    border-color:rgb(211, 252, 213);
+    color:rgb(211, 252, 213);
+    border-style: inset;
+    border-width: 1px;
+}
+
+.action-button:hover {
+    box-shadow: 0px 0px 18px rgba(211, 252, 213, 1);
+    color:rgb(211, 252, 213);
+}
+
+
+.delete-cantrip-button:hover{
+    border-color:rgb(211, 252, 213);
+    color:rgb(211, 252, 213);
+    border-style: inset;
+}
+
+#characters-div .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(24em, 3fr));
+    grid-auto-rows: 300px;
+    grid-gap: 1em;
+}
+
+#characters-div {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.play-button {
+    background-color: rgba(211, 252, 100, .65);
+    color: rgba(51, 153, 172, 1);
+    font-weight: bold;
+}
+
+.play-button:hover {
+    box-shadow: 0px 0px 15px rgb(159, 233, 247);
+    color: rgba(159, 223, 247, 1);
+}
+
+.modal-content {
+    background-color: rgba(89, 63, 98, .90);
+}
+
+
+/* tracker */
+
+#cantrips-div {
+    margin-top: 25px;
+}
+
+#cantrips-div p {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: large;
+    text-align: center;
+    color: rgb(211, 252, 213);
+}
+
+.slot-button-label {
+    background: radial-gradient(rgba(122, 59, 105, 1), rgba(122, 59, 105, 0));
+}
+
+
+.cast-cantrip-button {
+    position: relative;
+    background-color: rgba(89, 63, 98, .85);
+    border: solid;
+    border-color: rgb(211, 252, 213);
+    color: rgb(211, 252, 213);
+    padding: 20px;
+    transition-duration: 0.4s;
+    overflow: hidden;
+}
+
+.cast-cantrip-button:after {
+    content: "";
+    background: #90EE90;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+
+.cast-cantrip-button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+.cast-cantrip-button:hover {
+    background-color: #7A3B69;
+    box-shadow: 0px 0px 18px rgba(211, 252, 213, 1);
+    border-color: rgba(211, 252, 213, 1);
+}
+
+#tracker-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#rest-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+
+#rest-buttons button {
+    font-weight: bold;
+    border: none;
+    border: solid;
+    border-color: rgb(211, 252, 213);
+}
+
+#casting-history {
+    background: rgba(89, 63, 98, .75);
+    margin-top: 25px;
+    color: rgb(211, 252, 213);
+    padding: 15px;
+    border: solid;
+    border-color: rgb(211, 252, 213);
+}
+
+#board {
+    color: rgb(211, 252, 213);
+}
+
+.level-slot-buttons {
+    margin-top: 25px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+}
+
+.slot-button, .add-character-button {
+    background-color: rgba(89, 63, 98, .90);
+    border: solid;
+    border-color: rgb(211, 252, 213);
+    color: rgb(211, 252, 213);
+}
+
+.slot-button:hover, .add-character-button:hover {
+    background-color: #7A3B69;
+    box-shadow: 0px 0px 18px rgba(211, 252, 213, 1);
+    border-color: rgba(211, 252, 213, 1);
+}
+
+.used-button {
+    background-color: #7A3B69;
+    border-color: rgba(211, 252, 213, 1);
+    color: rgb(211, 252, 213);
+    font-weight: bold;
+}
+
+.slot-recover {
+    font-weight: bold;
+    border: none;
+    border: solid;
+    border-color: rgb(211, 252, 213);
+}
+
+
+/* facts sheet */
+
+  
+#character-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(36em, 2fr));
+    grid-gap: 1em;
+}
+
+.character-facts-sheet {
+    background: rgba(89, 63, 98, .85);
+    box-shadow: 0px 0px 18px rgba(123, 109, 141, 1);
+    color: rgb(211, 252, 213);
+}
+
+.fact-sheet-name {
+    color: rgb(211, 252, 213)
+}
+
+.fact-sheet-subhead {
+    text-transform: uppercase;
+    font-size: small;
+    text-align: center;
+    color: rgb(211, 252, 213)
+}
+
+.table-spell-count {
+    width: 100%;
+}
+
+th, td {
+    text-transform: uppercase;
+    border-bottom: 1px solid #ddd;
+    font-size: small;
+    text-align: center;
+    width: 50%;
+}
+
+.fav-by-level {
+    list-style-image: url("/static/img/magic.svg");
+}
+
+/* update character */
+
+#update-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+#update-card {
+    width: 48em;
+}

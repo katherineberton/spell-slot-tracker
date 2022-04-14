@@ -8,65 +8,76 @@
 
 {% block body %}
 <div class="container">
+
     <div class="container" id="characters-div">
     {% if char_list %}
     </div>
-    <p>
-      <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#createCharacterForm">
-        Add another character
-      </button>
-    </p>
-    <div class="collapse" id="createCharacterForm">
-        <div class="card card-body">
-            <form action="/new-char-registration" method="POST">
-                <p>What's your character's name? <input type="text" name="char-name"></p>
-                <p>What's your character's class? <select name=char-class>
-                    <option value="bard">Bard</option>
-                    <option value="cleric">Cleric</option>
-                    <option value="druid">Druid</option>
-                    <option value="paladin">Paladin</option>
-                    <option value="ranger">Ranger</option>
-                    <option value="sorcerer">Sorcerer</option>
-                    <option value="warlock">Warlock</option>
-                    <option value="wizard">Wizard</option>
-                    <option value="multiclass">Multiclass</option>
-                </select></p>
-                <p>What's your character's caster level?</p>
-                {% for num in range(1,21) %}
-                    <input type="radio" name="char-level" value={{ num }}>{{ num }}
-                {% endfor %}
-                <p><button type="submit">Let's go!</button></p>
-            </form>
-        </div>
+
+    <div class="add-character">
+      <p>
+        <button class="btn btn-secondary add-character-button" type="button" data-bs-toggle="collapse" data-bs-target="#createCharacterForm">
+          Add another character
+        </button>
+      </p>
+      <div class="collapse" id="createCharacterForm">
+          <div class="card card-body">
+              <form action="/new-char-registration" method="POST">
+                  <p>What's your character's name? <input class="text-input" type="text" name="char-name"></p>
+                  <p>What's your character's class? <select class="dropdown-input" name=char-class>
+                      <option class="dropdown-option" value="bard">Bard</option>
+                      <option class="dropdown-option" value="cleric">Cleric</option>
+                      <option class="dropdown-option" value="druid">Druid</option>
+                      <option class="dropdown-option" value="paladin">Paladin</option>
+                      <option class="dropdown-option" value="ranger">Ranger</option>
+                      <option class="dropdown-option" value="sorcerer">Sorcerer</option>
+                      <option class="dropdown-option" value="warlock">Warlock</option>
+                      <option class="dropdown-option" value="wizard">Wizard</option>
+                      <option class="dropdown-option" value="multiclass">Multiclass</option>
+                  </select></p>
+                  <p>What's your character's caster level?</p>
+                  {% for num in range(1,21) %}
+                      <input type="radio" name="char-level" value={{ num }}>{{ num }}
+                  {% endfor %}
+                  <p><button class="add-character-submit btn action-button" type="submit">Let's go!</button></p>
+              </form>
+          </div>
+      </div>
     </div>
+
     {% else %}
-    <p>You haven't created any characters yet! <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#createCharacterForm">
-        Add one.
-      </button>
-    </p>
-    <div class="collapse" id="createCharacterForm">
-        <div class="card card-body">
+    <div class="add-character">
+
+      <p>You haven't created any characters yet!
+        <button class="btn btn-secondary add-character-button" type="button" data-bs-toggle="collapse" data-bs-target="#createCharacterForm">
+          Add one.
+        </button>
+      </p>
+
+      <div class="collapse" id="createCharacterForm">
+          <div class="card card-body" id="createCharacterCard">
             <form action="/new-char-registration" method="POST">
-                <p>What's your character's name? <input type="text" name="char-name"></p>
-                <p>What's your character's class? <select name=char-class>
-                    <option value="bard">Bard</option>
-                    <option value="cleric">Cleric</option>
-                    <option value="druid">Druid</option>
-                    <option value="paladin">Paladin</option>
-                    <option value="ranger">Ranger</option>
-                    <option value="sorcerer">Sorcerer</option>
-                    <option value="warlock">Warlock</option>
-                    <option value="wizard">Wizard</option>
-                    <option value="multiclass">Multiclass</option>
-                </select></p>
-                <p>What's your character's caster level?</p>
-                {% for num in range(1,21) %}
-                    <input type="radio" name="char-level" value={{ num }}>{{ num }}
-                {% endfor %}
-                <p><button type="submit">Let's go!</button></p>
-            </form>
-        </div>
+              <p>What's your character's name? <input class="text-input" type="text" name="char-name"></p>
+              <p>What's your character's class? <select class="dropdown-input" name=char-class>
+                  <option class="dropdown-option" value="bard">Bard</option>
+                  <option class="dropdown-option" value="cleric">Cleric</option>
+                  <option class="dropdown-option" value="druid">Druid</option>
+                  <option class="dropdown-option" value="paladin">Paladin</option>
+                  <option class="dropdown-option" value="ranger">Ranger</option>
+                  <option class="dropdown-option" value="sorcerer">Sorcerer</option>
+                  <option class="dropdown-option" value="warlock">Warlock</option>
+                  <option class="dropdown-option" value="wizard">Wizard</option>
+                  <option class="dropdown-option" value="multiclass">Multiclass</option>
+              </select></p>
+              <p>What's your character's caster level?</p>
+              {% for num in range(1,21) %}
+                  <input type="radio" name="char-level" value={{ num }}>{{ num }}
+              {% endfor %}
+              <p><button class="add-character-submit btn action-button" type="submit">Let's go!</button></p>
+              </form>
+          </div>
+      </div>
     </div>
+
 
 </div>
 {% endif %}
@@ -75,13 +86,13 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">What cantrip do you want to add?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Which cantrip do you want to add?</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="cantrip-form" name="cantrip-form" method="POST">
             <div class="mb-3">
-              <select name="cantrip-to-add" id="cantrip-to-add">
+              <select class="dropdown-input" name="cantrip-to-add" id="cantrip-to-add">
                   {% for cantrip in cantrip_options %}
                       <option name="{{ cantrip.spell_name}}" id="dropdown-{{ cantrip.spell_slug }}" value="{{ cantrip.spell_slug }}">
                           {{ cantrip.spell_name }}
@@ -89,7 +100,7 @@
                   {% endfor %}
               </select>
             </div>
-            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add cantrip</button>
+            <button type="submit" class="btn action-button" data-bs-dismiss="modal">Add cantrip</button>
           </form>
         </div>
       </div>

@@ -121,13 +121,6 @@ def list_characters():
 
 
 
-@app.route(f'/create-a-character')
-def get_character_details():
-
-    return render_template('create_a_character.html')
-
-
-
 @app.route('/new-char-registration', methods=["POST"])
 def handle_new_character():
     """Creates new character"""
@@ -196,16 +189,6 @@ def increase_char_level(char_id):
     db.session.commit()
 
     return redirect('/landing')
-
-
-
-@app.route('/add-spell-known/<char_id>')
-def add_spell_known(char_id):
-    """Shows spell list"""
-    #adjust this later to filter for spells that only the character's class can use
-    spell_options = crud.get_all_spells()
-
-    return render_template('all_spells.html', spell_options=spell_options, char_id=char_id)
 
 
 

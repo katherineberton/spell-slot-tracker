@@ -9,14 +9,18 @@
 {% block first_header %}{% endblock %}
 
 {% block body %}
-<form action="/handle-character-update/{{ char.character_id }}" method="POST">
-    <p>Is {{ char.character_name }} multiclassing? <input type="checkbox" name="multiclassing">Yes, {{ char.character_name }} is multiclassing.</p>
-    <p>What's {{ char.character_name }}'s new total caster level, if any? Read more about multiclassing rules and total caster level <a href="https://5thsrd.org/rules/multiclassing/">here</a>.</p>
-    {% for num in range(1,21) %}
-        <input type="radio" name="char-level" value={{ num }}>{{ num }}
-    {% endfor %}
-    <p><button type="submit">Update</button></p>
-</form>
+<div class="container" id="update-container">
+    <div class="card" id="update-card">
+        <form action="/handle-character-update/{{ char.character_id }}" method="POST">
+            <p>Is {{ char.character_name }} multiclassing? <input type="checkbox" name="multiclassing">Yes, {{ char.character_name }} is multiclassing.</p>
+            <p>What's {{ char.character_name }}'s new total caster level, if any? Read more about multiclassing rules and total caster level <a href="https://5thsrd.org/rules/multiclassing/">here</a>.</p>
+            {% for num in range(1,21) %}
+                <input type="radio" name="char-level" value={{ num }}>{{ num }}
+            {% endfor %}
+            <p><button class="btn action-button" type="submit">Update</button></p>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block after_body %}{% endblock %}

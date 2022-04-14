@@ -13,35 +13,40 @@
     <!-- hidden input with char id so its value can be query selected-->
     <input type="hidden" id="char-id" value="{{ char.character_id }}">
     <div id="menu">
-      <div id="rest-buttons">
 
-        <form action="/handle-long-rest/{{ char.character_id }}">
-          <button class="btn btn-secondary" type="submit" id="long-rest-button">Long Rest</button>
-        </form>
-
-
-        {% if char_class == 'warlock' %}
-          <form action="/handle-short-rest/{{ char.character_id }}">
-            <button class="btn btn-secondary" type="submit" id="short-rest-button">Short Rest</button>
-          </form>
-
-        {% endif %}
-      </div>
-
-      <div id="cantrips-div">
-        <h5>{{ char.character_name.upper() }}'S CANTRIPS</h5>
-        <div class="btn-group" id="spells-known"></div>
-      </div>
+      {% if char_class not in ['paladin', 'ranger'] %}
+        <div id="cantrips-div">
+          <p>{{ char.character_name.upper() }}'S CANTRIPS</p>
+          <div class="btn-group" id="spells-known"></div>
+        </div>
+      {% endif %}
       
-      <div id="casting-history">      
+      <div id="casting-history">
+        <h5>Slots used earlier today:</h5>      
         {% if slots_used_today|length > 0 %}
-        <p>Slot activity from earlier today:</p>
           <ul>
             {% for slot in slots_used_today %}
               <li>Level {{ slot.level }} | {% if slot.spell_name %}{{ slot.spell_name }}{% else %}{{ slot.note }}{% endif %}</li>
             {% endfor %}
           </ul>
+        {% else %}
+        Cast some spells with the buttons on the right!
         {% endif %}
+      </div>
+
+      <div id="rest-buttons">
+
+        <form action="/handle-long-rest/{{ char.character_id }}">
+          <button class="btn btn-secondary" type="submit" id="long-rest-button">Long Rest - Replenish all slots</button>
+        </form>
+
+
+        {% if char_class == 'warlock' %}
+          <form action="/handle-short-rest/{{ char.character_id }}">
+            <button class="btn btn-secondary" type="submit" id="short-rest-button">Short Rest - Replenish all warlock slots</button>
+          </form>
+        {% endif %}
+
       </div>
 
 
@@ -52,27 +57,26 @@
 
 
     <div id="board">
-        <h5>SLOTS</h5>
         <div class="container" id="slot-buttons-container">
           {% if char_class != 'warlock' %}
             {% for level in slot_details.keys() %}
               {% if slot_details[level] > 0 and level != 'cantrips_known' %}
-                    <div id="buttons-level-{{ level[-1] }}">
+                    <div class="level-slot-buttons" id="buttons-level-{{ level[-1] }}">
                       <p>
-                        Level {{ level[-1] }} slots per day: {{ slot_details[level] }}
+                        <span class="slot-button-label">Level {{ level[-1] }} slots</span>
                         {% if char_class == 'wizard' %}
-                          <button class="slot-recover arcane-recovery" id="add-slot-{{ level[-1] }}">Arcane Recovery</button>
+                          <button class="btn btn-secondary slot-recover arcane-recovery" id="add-slot-{{ level[-1] }}">Arcane Recovery</button>
                         {% endif %}
                         {% if char_class == 'sorcerer' %}
-                        <button class="slot-recover sorcery-points" id="add-slot-{{ level[-1] }}">Replenish with sorcery points</button>
-                      {% endif %}
+                          <button class="btn btn-secondary slot-recover sorcery-points" id="add-slot-{{ level[-1] }}">Replenish with sorcery points</button>
+                        {% endif %}
                       </p>
                     </div>
               {% endif %}
             {% endfor %}
           {% else %}
-            <div id="buttons-level-{{ slot_details['max_level'] }}">
-              Level {{ slot_details['max_level']}} slots per rest: {{ slot_details['slots']}}
+            <div class="level-slot-buttons" id="buttons-level-{{ slot_details['max_level'] }}">
+              <p>Level {{ slot_details['max_level']}} slots per rest: {{ slot_details['slots']}}</p>
             </div>
           {% endif %}
           </div>

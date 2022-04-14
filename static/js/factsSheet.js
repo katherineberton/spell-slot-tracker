@@ -57,9 +57,9 @@ fetch('/list-characters-fact-sheet')
             for (const level in character.fav_spell_each_level) {
                 const fave = character.fav_spell_each_level[level];
                 if (fave.length > 0) {
-                    favSpellsLevelDisplay += `<li>Favorite level ${level} spell: ${fave[0]}! Total casts: ${fave[1]}.</br></li>`
+                    favSpellsLevelDisplay += `<li class="fav-by-level">Favorite level ${level} spell: ${fave[0]}! Total casts: ${fave[1]}.</br></li>`
                 } else {
-                    favSpellsLevelDisplay += `<li>No favorite level ${level} spells yet.</br></li>`
+                    favSpellsLevelDisplay += `<li class="fav-by-level">No favorite level ${level} spells yet.</br></li>`
                 }
             }
 
@@ -80,8 +80,8 @@ fetch('/list-characters-fact-sheet')
             characterSection.insertAdjacentHTML('beforeend',`
             <div class="card character-facts-sheet" style="width: 36rem;">
                 <div class="card-body" id="${character.character_id}-card">
-                    <h5 class="card-title">${character.character_name}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
+                    <h5 class="fact-sheet-name">${character.character_name}</h5>
+                    <h6 class="fact-sheet-subhead">
                         Level ${character.character_level} ${character.player_class} - Adventuring for ${daysDisplay}
                     </h6>
                     <div class="card-text" id="${character.character_id}-body">
@@ -90,7 +90,7 @@ fetch('/list-characters-fact-sheet')
                         <p id="${character.character_id}-fav-levels">
                             ${favSpellsLevelDisplay}
                         </p>
-                        <table id="${character.character_id}-spell-count">
+                        <table class="table-spell-count" id="${character.character_id}-spell-count">
                             <tr>
                                 <th>Level</th>
                                 <th>Total spells cast</th>

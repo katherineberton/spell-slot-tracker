@@ -53,6 +53,7 @@ fetch(`/list-spells-known-2/${charId}`)
               `<button
               class="btn cast-cantrip-button btn-outline-primary"
               id="${spell.spell_slug}">
+                <img src="/static/img/magic.svg">
                 ${info.name}
               </button>`
           )
@@ -90,21 +91,22 @@ fetch(`/get-all-slots/${charId}`)
       
       //if it was used by a spell, disable button and populate with spell name
       if (slot.spell_type_id) {
-        buttonDiv.insertAdjacentHTML('beforeend', `<button class="btn btn-primary" disabled=true>${slot.spell_name}</button>`)
+        buttonDiv.insertAdjacentHTML('beforeend', `<button class="btn used-button" disabled=true>${slot.spell_name}</button>`)
       
       //if it was used for something else, disable button and populate with note content
       } else if (slot.slot_reference) {
-        buttonDiv.insertAdjacentHTML('beforeend', `<button class="btn btn-primary" disabled=true>${slot.slot_reference}</button>`)
+        buttonDiv.insertAdjacentHTML('beforeend', `<button class="btn used-button" disabled=true>${slot.slot_reference}</button>`)
 
       //if it's still available
       } else {
         buttonDiv.insertAdjacentHTML('beforeend', `
                                                   <button type="button"
-                                                  class="btn btn-primary"
+                                                  class="btn btn-primary slot-button"
                                                   data-bs-toggle="modal"
                                                   data-bs-target="#spellModal" 
                                                   slotLevel="${slot.slot_level}"
                                                   id="cast-pos-${i}">
+                                                  <img src="/static/img/magic.svg">
                                                     CAST
                                                   </button>
                                                   `)

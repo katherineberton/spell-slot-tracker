@@ -57,7 +57,7 @@ function OffcanvasContent(props) {
   //if spell can be upcast, show description of what happens at higher levels
   let higherLevelDisplay = null;
   if (spellDetails.higher_level != "") {
-    higherLevelDisplay = (<p>{spellDetails.hlDescription}</p>)
+    higherLevelDisplay = (<p id="hl-description">{spellDetails.hlDescription}</p>)
   }
 
   return (
@@ -92,10 +92,10 @@ function SpellCard(props) {
     return(
       <div className="card border-info">
           <div className="card-body">
-            <h5 className="card-title" id={`title-${props.spellSlug}`}>
+            <h5 id={`title-${props.spellSlug}`}>
               {props.spellName}{ritualDisplay}{concentrationDisplay}
             </h5>
-            <h6 className="card-subtitle mb-2 text-muted">Base level: {props.spellLevel}</h6>
+            <h6>Base level: {props.spellLevel}</h6>
             <button className="btn btn-sm see-details-btn"
                     type="button"
                     onClick={() => props.onClick(props.spellSlug)}
@@ -152,15 +152,13 @@ function SpellCardContainer(props) {
     return (
       <React.Fragment>
         {spellCards}
-        <div>
-        <ReactBootstrap.Offcanvas show={show} onHide={handleClose} scroll={true} backdrop={true}>
+        <ReactBootstrap.Offcanvas show={show} onHide={handleClose} scroll>
           <ReactBootstrap.Offcanvas.Header closeButton>
           </ReactBootstrap.Offcanvas.Header>
           <ReactBootstrap.Offcanvas.Body>
             <OffcanvasContent slug={currentSpell} />
           </ReactBootstrap.Offcanvas.Body>
         </ReactBootstrap.Offcanvas>
-        </div>
       </React.Fragment>
     )
   }

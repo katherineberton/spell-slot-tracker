@@ -62,7 +62,7 @@ function CharacterCard(props) {
         );
         //if cantrips known, display them
         if (cantrips.length > 0) {
-            cantripsSection = (<div className="col cantrips-section">{cantripComponents}</div>);
+            cantripsSection = (<React.Fragment><h5>Cantrips known:</h5><div className="col cantrips-section">{cantripComponents}</div></React.Fragment>);
         } else { 
             //otherwise, prompt to add one
             cantripsSection =
@@ -81,16 +81,15 @@ function CharacterCard(props) {
                 <h3 className="character-head">{props.name}</h3>
                 <h4 className="character-deets">Class: {props.playerClass} | Level: {props.level}</h4>
                 <div className="row" id={`cantrips-known-${props.charId}`}>
-                    <h5>Cantrips known:</h5>
                     {cantripsSection}
                 </div>
                 <div className="row" id="actions-bar">
                     <h5>Actions:</h5>
                         <div className="btn-group" role="group">
-                            <a className="btn action-button" href={`/level-up/${props.charId}`} role="button">Level up</a>
-                            <a className="btn action-button" href={`/update-character/${props.charId}`} role="button">Update</a>
+                            <a className="btn d-flex align-items-center justify-content-center action-button" href={`/level-up/${props.charId}`} role="button">Level up</a>
+                            <a className="btn d-flex align-items-center justify-content-center action-button" href={`/update-character/${props.charId}`} role="button">Update</a>
                             {addCantButton}
-                            <a className="btn play-button" href={`/play/${props.charId}`} role="button">PLAY</a>
+                            <a className="btn action-button d-flex align-items-center justify-content-center play-button" href={`/play/${props.charId}`} role="button">PLAY</a>
                         </div>
                 </div>
             </div>

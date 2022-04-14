@@ -10,9 +10,9 @@
 
 {% block body %}
 
-<ul class="nav nav-tabs" id="nav-tabs">
+<ul class="nav nav-tabs justify-content-center" id="nav-tabs">
     {% for class in ['all', 'bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock', 'wizard'] %}
-        <li class="nav-item">
+        <li class="nav-item-spell-tab">
             <a class="nav-link spell-tab" href="/browse-{{ class }}-spells" id="{{ class }}-tab">{{ class.title() }} spells</a>
         </li>
     {% endfor %}

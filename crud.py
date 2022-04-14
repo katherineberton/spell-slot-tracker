@@ -6,7 +6,6 @@ from datetime import datetime
 from slot_rules import slot_rules
 
 
-
 #----------------------------------------managing users
 
 def create_user(name, email, password):

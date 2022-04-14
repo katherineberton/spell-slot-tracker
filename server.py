@@ -1,5 +1,5 @@
 from crypt import methods
-from os import name
+from os import environ
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
@@ -7,7 +7,7 @@ from model import connect_to_db, db
 import crud
 
 app = Flask(__name__)
-app.secret_key = "dev-mode"
+app.secret_key = environ['KEY']
 
 
 #------------------------------------------------------------------setup

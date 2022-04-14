@@ -4,19 +4,16 @@
 
 {% block head %}{% endblock %}
 
-{% block first_header %}New User Registration{% endblock %}
-
 {% block body %}
 
-
-<form action="/new-user-registration" method="POST">
-<p>What's your name? <input type="text" name="new-user-name"></p>
-<p>What's your email address? <input type="text" name="new-user-email"></p>
-<p>What do you want your password to be? <input type="password" name="new-user-password"></p>
-<!-- <p>Please confirm your password. <input type="password" name="new_user_password_confirm"></p> -->
-<p><button type="submit">Register</button> with the above details.</p>
-
-</form>
+<div class="container" id="register-container">
+    <form action="/new-user-registration" method="POST">
+        <p>What's your name? <input type="text" name="new-user-name"></p>
+        <p>What's your email address? <input type="text" name="new-user-email"></p>
+        <p>What do you want your password to be? <input type="password" name="new-user-password"></p>
+        <p><button type="submit" class="register-button">Register</button> with the above details.</p>
+    </form>
+</div>
 
 {% endblock %}
 

@@ -263,6 +263,11 @@ p.flash-msg {
     background-color: rgba(89, 63, 98, .90);
 }
 
+.add-character p {
+    color:rgb(211, 252, 213);
+    font-weight: bold;
+}
+
 
 /* tracker */
 

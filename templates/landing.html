@@ -7,8 +7,9 @@
 {% block body %}
 <div class="container">
 
+  {% if char_list %}
     <div class="container" id="characters-div">
-    {% if char_list %}
+    
     </div>
 
     <div class="add-character">
@@ -45,11 +46,11 @@
     {% else %}
     <div class="add-character">
 
-      <p>You haven't created any characters yet!
+      <p>You haven't created any characters yet!</p>
         <button class="btn btn-secondary add-character-button" type="button" data-bs-toggle="collapse" data-bs-target="#createCharacterForm">
           Add one.
         </button>
-      </p>
+      
 
       <div class="collapse" id="createCharacterForm">
           <div class="card card-body" id="createCharacterCard">

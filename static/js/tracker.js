@@ -101,7 +101,7 @@ fetch(`/get-all-slots/${charId}`)
       } else {
         buttonDiv.insertAdjacentHTML('beforeend', `
                                                   <button type="button"
-                                                  class="btn btn-primary slot-button"
+                                                  class="btn slot-button"
                                                   data-bs-toggle="modal"
                                                   data-bs-target="#spellModal" 
                                                   slotLevel="${slot.slot_level}"

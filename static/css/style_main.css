@@ -268,6 +268,11 @@ p.flash-msg {
     font-weight: bold;
 }
 
+.modal-dialog {
+    position: sticky;
+    height: 100vh;
+}
+
 
 /* tracker */
 

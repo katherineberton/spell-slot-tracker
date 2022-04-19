@@ -1,10 +1,30 @@
-figure out how to get things side by side
-add rogues to classes
+add arcane trickster rogue to classes
 
-condense crud functions and function calls that can be condensed
+fix warlock short rest logic - right now it adds a full set of new slots,
+instead of re-upping slots to max slots. so if a warlock only used one
+before their short rest and had max 2 at a time, they'd short rest and
+end up with 3 total available.
 
-figure out how to deal with sorting characters on landing page
-figure out how to get max slot available better
-custom classes?
+fix the css on the add cantrip modal on the landing page - it does not
+scroll with the viewport. this is low priority because this will really
+only apply to people who have so many characters that they need to scroll
+down to see all of them.
 
+flesh out the multiclassing system to accommodate warlock multiclassing.
+    change db architecture to give each slot a "type", warlock or caster
+    add a new association table that will allow one character to have 
+        multiple classes, and add a levels column to this table
+    change the logic in the server to generate two sets of blank slots -
+        warlock and regular caster - on a long rest for a character that
+        has both
 
+encrypt passwords
+
+alter the spell casting modal to only display spells of the selected slot
+or higher. right now all spells are in the drop down box
+
+implement spells known for classes that don't have to prepare spells, and
+prepared spells for classes that know their whole list but have to prepare
+    this could get weird with warlock multiclassing again.
+
+research a different API or data source to accommodate the full spell list

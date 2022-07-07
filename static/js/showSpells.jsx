@@ -50,9 +50,11 @@ function OffcanvasContent(props) {
   //if spell has material components, show components
   let componentsDisplay = spellDetails.components;
 
-  if (spellDetails.components.includes('M')) {
-    componentsDisplay = componentsDisplay + ` (${spellDetails.materials})`;
-  }
+
+  // figure out why this isn't working but the other conditionals like R and C are
+  // if (spellDetails.components.includes('M')) {
+  //   componentsDisplay = componentsDisplay + ` (${spellDetails.materials})`;
+  // }
 
   //if spell can be upcast, show description of what happens at higher levels
   let higherLevelDisplay = null;

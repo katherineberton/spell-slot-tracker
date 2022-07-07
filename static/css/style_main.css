@@ -268,11 +268,13 @@ p.flash-msg {
     font-weight: bold;
 }
 
-.modal-dialog {
-    position: sticky;
-    height: 100vh;
+.modal-open {
+    overflow-y: auto !important;
 }
 
+.modal-backdrop {
+    height: 100vh;
+}
 
 /* tracker */
 
@@ -455,4 +457,25 @@ th, td {
 
 #update-card {
     width: 48em;
+}
+
+/* info page */
+
+#info-container {
+    background-color:rgba(123, 109, 141, .9);
+    box-shadow: 0px 0px 50px rgba(123, 109, 141, 1);
+    padding: 25px;
+    color: rgba(211, 252, 213, 1);
+}
+
+#info-container p a {
+    background-color:rgba(0, 0, 0, 0);
+    color: rgb(13, 202, 240);
+    border-color: rgb(13, 202, 240);
+}
+
+#info-container p a:hover {
+    background-color:rgba(51, 153, 172, .5);
+    color:rgb(211, 252, 213);
+    box-shadow: 0px 0px 15px rgba(51, 153, 172, 1);
 }

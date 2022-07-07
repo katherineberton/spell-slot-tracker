@@ -240,6 +240,11 @@ def show_facts_sheet():
 
     return render_template('facts_sheet.html')
 
+@app.route('/info-sheet')
+def show_info_sheet():
+    """Shows info and FAQs"""
+
+    return render_template('info_sheet.html')
 
         
 #------------------------------------------------------------------tracker

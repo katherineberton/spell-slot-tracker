@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Spell Slot Tracker{% endblock %}
+
+{% block js %}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+<div class="container" id="info-container">
+    <h3>Information on this project</h3>
+    <h5>Do you play Dungeons and Dragons 5th edition as a caster? Are you tired of writing down which spells you've cast and erasing them at a long rest, gumming up your notebook or the back of your character sheet?</h5>
+    <h4>I was. So I built this spell slot tracker.</h4>
+    <p>This full stack webapp allows you to browse spells, keep track of your caster characters' slots for the day, mark what you used the slots for, level up and otherwise update your characters' details, and review their favorite spells to cast by frequency.</p>
+    <p>This is <b>not</b> meant to be a replacement for a character sheet and at the moment cannot track inventory for spellcasting materials.</p>
+    <p>I'm Kat, and I'm a full stack software engineer. This tracker is my capstone project for my software engineering fellowship at Hackbright Academy in early 2022. You can find my linkedin <a href="https://www.linkedin.com/in/katherine-berton/">here</a> and my github <a href="https://github.com/katherineberton">here.</a> Future features are in the to-do list <a href="https://github.com/katherineberton/spell-slot-tracker/blob/main/to-do-list.txt">here</a>. If you run into problems or notice any bugs, please let me know by emailing me at <a href="mailto:kgberton@outlook.com">kgberton@outlook.com</a>.</p>
+    <p>The gorgeous, mystical background picture was taken by <a href="https://unsplash.com/photos/uhoILl3HUZM">Vincent Guth</a>. The navbar's texture was designed by <a href="https://www.toptal.com/designers/subtlepatterns/congruent-pentagon/">Atle Moe</a>. The spell data comes from the <a href="https://api.open5e.com/">Open5e API</a>.</p>
+
+    <h3>Frequently Asked Questions</h3>
+    <h5>Can I use this for multiple characters?</h5>
+    <p>Ah, a busy role player, I see. You can! If you register, you can add multiple characters that are visible from your "My characters" landing page.</p>
+    <h5>Can I multiclass!</h5>
+    <p>You can multiclass! In order to do so, update your character to the class called "multiclass" (since all* multiclasses follow the same "multiclass" slot table). Read more about multiclassing rules and total caster level <a href="https://5thsrd.org/rules/multiclassing/">here</a>.</p>
+    <p>*The only wrench in this tracker's multiclassing ability is warlocks with other casters. (Skip to the next paragraph if you want to know my recommendation on how to deal with it.) This is because, per the Player's Handbook (PHB), warlocks are not "spellcasters" in the same way that other casting classes are, although they do use slots to cast spells. This distinction can be seen in the class descriptions - the other casting classes at level 1 gain the "Spellcasting" ability, where the warlock class gains "Pact Magic" instead. This means a warlock that multiclasses has its warlock slots, subject to the warlock table and replenished on a short or long rest, and it has its other class's slots, subject to that class's table and replenishable on a long rest. On the other hand, other caster multiclasses all follow the same slot table.</p>
+    <p>At the moment, the solution for warlock multiclassing is to create two characters under your account with the same name, one for your warlock levels and one for your other class's levels.</p>
+    <h5>Can I use it to track non-spell abilities that nonetheless use slots?</h5>
+    <p>Bring ye all the paladins and smite away, because there is a notes section in the slot form that allows you to write in plain text what you used the slot for if it's not a spell in the database's list.</p>
+</div>
+{% endblock %}
